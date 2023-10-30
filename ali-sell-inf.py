@@ -72,7 +72,7 @@ if uploaded_images:
         if not uploaded_xlsx:  
             # Check platform in the OCR text
             st.write(ocr_text)
-            if 'Informazioni' in ocr_text:
+            if 'Business information' in ocr_text:
                 platform = 'ALIEXPRESS'
             else:
                 platform = 'UNKNOWN'
@@ -228,7 +228,7 @@ if uploaded_images:
         aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['SELLER_BUSINESS_NAME'].str.strip()
 
         aliexpress_df['COMPANY_TYPE'] = aliexpress_df['SELLER_BUSINESS_NAME']
-        aliexpress_df['COMPANY_TYPE'] = aliexpress_df['COMPANY_TYPE'].str.replace(r'^.*Co.,', 'Limited Liability Company', regex=True)
+        aliexpress_df['COMPANY_TYPE'] = aliexpress_df['COMPANY_TYPE'].str.replace(r'^.*Co., Ltd', 'Limited Liability Company', regex=True)
 
         try:
             aliexpress_df['SELLER_VAT_N'] = aliexpress_df['Partita.IVA']
