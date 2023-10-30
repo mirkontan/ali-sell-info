@@ -18,20 +18,6 @@ def remove_whitespace(df, columns):
         df[column] = df[column].str.replace(r'\s', '', regex=True)
 
 
-from googletrans import Translator
-
-# Create a translator instance
-translator = Translator()
-
-# Define a function to translate text
-def translate_to_english(text):
-    try:
-        translated = translator.translate(text, src='zh-CN', dest='en')
-        return translated.text
-    except Exception as e:
-        return text
-
-
 # Set the page title
 st.set_page_config(page_title='Chinese Text OCR', layout='wide')
 
@@ -80,7 +66,7 @@ if uploaded_images:
         # Perform OCR on the entire uploaded image (CN language)
         image = np.array(bytearray(uploaded_image.read()), dtype=np.uint8)
         image = cv2.imdecode(image, cv2.IMREAD_COLOR)
-        ocr_text = pytesseract.image_to_string(image, lang='chi_sim')
+        ocr_text = pytesseract.image_to_string(image)
        
 
         if not uploaded_xlsx:
@@ -88,16 +74,9 @@ if uploaded_images:
             # ALTRIMENTI NON RICONOSCE LE ALTRE PIATTAFORME (non capisco perché)    
             # Check platform in the OCR text
             st.write(ocr_text)
-            if 'scportaltaobao' in ocr_text:
-                platform = 'TAOBAO'
-            if '京东商城' or 'malljd' in ocr_text:
-                platform = 'JD COM'
-            if 'm.1688' in ocr_text:
-                platform = 'CHINAALIBABA'
-            if '天猫网' in ocr_text:
-                platform = 'TMALL'
             if 'Informazioni' in ocr_text:
                 platform = 'ALIEXPRESS'
+            else 
            
         else:
             row = df_urls.iloc[i]  # We want to match with the first row of df_urls
