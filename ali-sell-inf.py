@@ -227,7 +227,8 @@ if uploaded_images:
         # Remove leading and trailing spaces
         aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['SELLER_BUSINESS_NAME'].str.strip()
 
-        aliexpress_df['COMPANY_TYPE'] = '-'
+        aliexpress_df['COMPANY_TYPE'] = aliexpress_df['SELLER_BUSINESS_NAME']
+        aliexpress_df['COMPANY_TYPE'] = aliexpress_df['COMPANY_TYPE'].str.replace(r'^.*Co.,', 'Limited Liability Company')
 
         try:
             aliexpress_df['SELLER_VAT_N'] = aliexpress_df['Partita.IVA']
