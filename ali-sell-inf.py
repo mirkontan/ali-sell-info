@@ -136,6 +136,7 @@ if uploaded_images:
             extracted_data_per_image_aliexpress['FILENAME'] = uploaded_image.name
             st.write(extracted_data_per_image_aliexpress)
             st.write(data)
+            extracted_data_per_image_aliexpress = pd.concat([extracted_data_per_image, extracted_data_per_image_aliexpress], axis=1)
             df_extraction_aliexpress = pd.concat([df_extraction_aliexpress, extracted_data_per_image_aliexpress], ignore_index=True)
 
             targets = targets_aliexpress
@@ -184,6 +185,7 @@ if uploaded_images:
 
 
     df_extraction_overall = pd.concat([df_extraction_aliexpress, df_extraction_test], ignore_index=True)
+    
     st.header('df EXTRACTION TEST')
     st.write(df_extraction_test)
     st.header('DF EXTRACTION ALIEXPRESS')
@@ -403,6 +405,8 @@ if uploaded_images:
 
     sellers_info_df['SELLER_CITY'] = sellers_info_df['SELLER_CITY'].str.replace(' City', '', regex=False)
     sellers_info_df['SELLER_PROVINCE'] = sellers_info_df['SELLER_PROVINCE'].str.replace(' Province', '', regex=False)
+
+    sellers_info_df = sellers_info_df[['SELLER_BUSINESS_NAME', 'SELLER_VAT_N', 'COMPANY_TYPE', 'LEGAL_REPRESENTATIVE', 'SELLER_ADDRESS', 'SELLER_COUNTRY', 'SELLER_PROVINCE', 'SELLER_CITY', 'ESTABLISHED_IN', 'BUSINESS_DESCRIPTION', 'SELLER_EMAIL', 'SELLER_TEL_N']]
 
     # Display the DataFrame with extracted text
     st.subheader("Extracted Text Data")
