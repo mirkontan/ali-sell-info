@@ -52,7 +52,7 @@ if uploaded_images:
     # extracted_data = {}
     df_extraction = pd.DataFrame()
     df_extraction_aliexpress = pd.DataFrame()
-    df_extraction_tmall = pd.DataFrame()
+    df_extraction_test = pd.DataFrame()
 
     for i, uploaded_image in enumerate(uploaded_images):
         # Display the uploaded image
