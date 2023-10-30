@@ -136,7 +136,6 @@ if uploaded_images:
             extracted_data_per_image_aliexpress['FILENAME'] = uploaded_image.name
             st.write(extracted_data_per_image_aliexpress)
             st.write(data)
-            extracted_data_per_image_aliexpress = pd.concat([extracted_data_per_image, extracted_data_per_image_aliexpress], axis=1)
             df_extraction_aliexpress = pd.concat([df_extraction_aliexpress, extracted_data_per_image_aliexpress], ignore_index=True)
 
             targets = targets_aliexpress
