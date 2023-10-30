@@ -277,8 +277,7 @@ if uploaded_images:
         except KeyError:
             aliexpress_df['SELLER_TEL_N'] = aliexpress_df['Phone Number']
 
-
-         try:
+        try:
             aliexpress_df['LEGAL_REPRESENTATIVE'] = aliexpress_df['Rappresentante legale']
         except KeyError:
             aliexpress_df['LEGAL_REPRESENTATIVE'] = aliexpress_df['Legal Representative']
