@@ -142,7 +142,7 @@ if uploaded_images:
         
 
 
-        if extracted_data_per_image['PLATFORM'] == 'TEST' or None:
+        if extracted_data_per_image['PLATFORM'] == 'UNKNOWN' or None:
             targets = targets_test
             # Perform OCR on the entire uploaded image (IT language)
             image = np.array(bytearray(uploaded_image.read()), dtype=np.uint8)
@@ -171,7 +171,7 @@ if uploaded_images:
                         data[current_key] += ' ' + line.strip()            
             # Assign the 'PLATFORM' and 'FILENAME' values in the extracted_data_per_image dictionary
             extracted_data_per_image_test = pd.DataFrame([data])
-            extracted_data_per_image_test['PLATFORM'] = 'TEST'
+            extracted_data_per_image_test['PLATFORM'] = 'UNKNOWN'
             extracted_data_per_image_test['FILENAME'] = uploaded_image.name
             st.write(extracted_data_per_image_test)
             st.write(data)
@@ -198,7 +198,7 @@ if uploaded_images:
 
     
     aliexpress_df = df_sellers_info[df_sellers_info['PLATFORM'] == 'ALIEXPRESS']
-    test_df = df_sellers_info[df_sellers_info['PLATFORM'] == 'TEST']
+    test_df = df_sellers_info[df_sellers_info['PLATFORM'] == 'UNKNOWN']
     
 
 
