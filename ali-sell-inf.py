@@ -214,7 +214,7 @@ if uploaded_images:
         try:
             aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['Nome della società']
         except KeyError:
-            aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['Company Name']
+            aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['Company name']
 
         # aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['SELLER_BUSINESS_NAME'].str.replace(r'_.','')
         # aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['SELLER_BUSINESS_NAME'].str.replace(r"'",'')
@@ -232,9 +232,10 @@ if uploaded_images:
         try:
             aliexpress_df['SELLER_VAT_N'] = aliexpress_df['Partita.IVA']
         except KeyError:
-            aliexpress_df['SELLER_VAT_N'] = aliexpress_df['Partita IVA']
+            aliexpress_df['SELLER_VAT_N'] = aliexpress_df['VAT number']
         # Remove 'Numero di' and the text before it if it's present
         aliexpress_df['SELLER_VAT_N'] = aliexpress_df['SELLER_VAT_N'].str.replace(r'Numero di.*$', '', regex=True)
+        aliexpress_df['SELLER_VAT_N'] = aliexpress_df['SELLER_VAT_N'].str.replace(r'Business.*$', '', regex=True)
         # aliexpress_df['SELLER_VAT_N'] = aliexpress_df['SELLER_VAT_N'].str.replace(r'registrazione.*$', '', regex=True)
         # Remove leading and trailing spaces
         aliexpress_df['SELLER_VAT_N'] = aliexpress_df['SELLER_VAT_N'].str.strip()
@@ -242,7 +243,7 @@ if uploaded_images:
         try:
             aliexpress_df['ESTABLISHED_IN'] = aliexpress_df['Stabilito']
         except KeyError:
-            aliexpress_df['ESTABLISHED_IN'] = aliexpress_df['. Stabilito']
+            aliexpress_df['ESTABLISHED_IN'] = aliexpress_df['Established']
         
         
         aliexpress_df['ESTABLISHED_IN'] = aliexpress_df['ESTABLISHED_IN'].str.strip()
@@ -259,7 +260,7 @@ if uploaded_images:
         try:
             aliexpress_df['SELLER_EMAIL'] = aliexpress_df['E-mail']
         except KeyError:
-            aliexpress_df['SELLER_EMAIL'] = aliexpress_df['E-mall']
+            aliexpress_df['SELLER_EMAIL'] = aliexpress_df['Emall']
 
         aliexpress_df['SELLER_EMAIL'] = aliexpress_df['SELLER_EMAIL'].str.strip()
         aliexpress_df['SELLER_EMAIL'] = aliexpress_df['SELLER_EMAIL'].str.split(' ').str[0]
@@ -271,11 +272,18 @@ if uploaded_images:
         # aliexpress_df['SELLER_EMAIL'] = aliexpress_df['SELLER_EMAIL'].str.replace(r' outlook', '@outlook', regex=True)
         # aliexpress_df['SELLER_EMAIL'] = aliexpress_df['SELLER_EMAIL'].str.replace(r'00g.com', '@qq.com', regex=True)
   
-        aliexpress_df['SELLER_TEL_N'] = aliexpress_df['Numero di telefono']
+        try:
+            aliexpress_df['SELLER_TEL_N'] = aliexpress_df['Numero di telefono']
+        except KeyError:
+            aliexpress_df['SELLER_TEL_N'] = aliexpress_df['Phone Number']
 
-        aliexpress_df['LEGAL_REPRESENTATIVE'] = aliexpress_df['Rappresentante legale']
 
-        aliexpress_df['BUSINESS_DESCRIPTION'] = aliexpress_df['Ambito di attività']
+         try:
+            aliexpress_df['LEGAL_REPRESENTATIVE'] = aliexpress_df['Rappresentante legale']
+        except KeyError:
+            aliexpress_df['LEGAL_REPRESENTATIVE'] = aliexpress_df['Legal Representative']
+
+        aliexpress_df['BUSINESS_DESCRIPTION'] = aliexpress_df['Business Scope']
 
 
 # ------------------------------------------------------------
