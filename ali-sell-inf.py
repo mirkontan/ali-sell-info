@@ -89,7 +89,7 @@ if uploaded_images:
         
         # Create a selection box to allow the user to select the platform
         # Define the platform options
-        platform_options = ['ALIEXPRESS', 'TEST']
+        platform_options = ['ALIEXPRESS', 'UNKNOWN']
         
         # Create a selection box with a unique key based on the filename
         selected_platform = st.selectbox(f'Select the platform for {uploaded_image.name}', platform_options, index=platform_options.index(extracted_data_per_image['PLATFORM']), key=f"selectbox_{i}")
