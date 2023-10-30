@@ -294,46 +294,79 @@ if uploaded_images:
         for target in targets_test:
             test_df[target] = None  # Add new columns with None values
     else:
-        # # Check for missing values and replace them with an empty string
-        test_df['SELLER_VAT_N'] = test_df['企业注册号'].fillna('') + test_df['注册号'].fillna('')
-        test_df['SELLER_VAT_N'].fillna('', inplace=True)
-        test_df['SELLER_VAT_N'] = test_df['SELLER_VAT_N'].str.split(':').str[1]
-        test_df['SELLER_VAT_N'] = test_df['SELLER_VAT_N'].str.replace(r'\s', '', regex=True)
-       
-        test_df['SELLER_BUSINESS_NAME_CN'] = test_df['企业名称'].fillna('') + test_df['公司名称'].fillna('')
+        try:
+            test_df['SELLER_BUSINESS_NAME'] = test_df['Nome della società']
+        except KeyError:
+            test_df['SELLER_BUSINESS_NAME'] = test_df['Company name']
+
+        # test_df['SELLER_BUSINESS_NAME'] = test_df['SELLER_BUSINESS_NAME'].str.replace(r'_.','')
+        # test_df['SELLER_BUSINESS_NAME'] = test_df['SELLER_BUSINESS_NAME'].str.replace(r"'",'')
+        # test_df['SELLER_BUSINESS_NAME'] = test_df['SELLER_BUSINESS_NAME'].str.replace(r"‘",'')
+        # test_df['SELLER_BUSINESS_NAME'] = test_df['SELLER_BUSINESS_NAME'].str.replace(r"Co., Lt",'Co., Ltd')
+        # test_df['SELLER_BUSINESS_NAME'] = test_df['SELLER_BUSINESS_NAME'].str.replace(r"Co., Lig",'Co., Ltd')
+        # test_df['SELLER_BUSINESS_NAME'] = test_df['SELLER_BUSINESS_NAME'].str.replace(r"Co Lia",'Co., Ltd')
+        # test_df['SELLER_BUSINESS_NAME'] = test_df['SELLER_BUSINESS_NAME'].str.replace(r"Co., Lîd",'Co., Ltd')
+        # test_df['SELLER_BUSINESS_NAME'] = test_df['SELLER_BUSINESS_NAME'].str.replace(r'Co., Ltd.*$', 'Co., Ltd', regex=True)
+        # Remove leading and trailing spaces
+        test_df['SELLER_BUSINESS_NAME'] = test_df['SELLER_BUSINESS_NAME'].str.strip()
+
+        test_df['COMPANY_TYPE'] = '-'
+
+        try:
+            test_df['SELLER_VAT_N'] = test_df['Partita.IVA']
+        except KeyError:
+            test_df['SELLER_VAT_N'] = test_df['VAT number']
+        # Remove 'Numero di' and the text before it if it's present
+        test_df['SELLER_VAT_N'] = test_df['SELLER_VAT_N'].str.replace(r'Numero di.*$', '', regex=True)
+        test_df['SELLER_VAT_N'] = test_df['SELLER_VAT_N'].str.replace(r'Business.*$', '', regex=True)
+        # test_df['SELLER_VAT_N'] = test_df['SELLER_VAT_N'].str.replace(r'registrazione.*$', '', regex=True)
+        # Remove leading and trailing spaces
+        test_df['SELLER_VAT_N'] = test_df['SELLER_VAT_N'].str.strip()
+
+        try:
+            test_df['ESTABLISHED_IN'] = test_df['Stabilito']
+        except KeyError:
+            test_df['ESTABLISHED_IN'] = test_df['Established']
         
-        test_df['COMPANY_TYPE_CN'] = test_df['类 型'].fillna('') + test_df['类 ”型'].fillna('') + test_df['类 。 型'].fillna('') + test_df['类型'].fillna('')
-        test_df['COMPANY_TYPE_CN'] = test_df['COMPANY_TYPE'].str.split('住').str[0]
-        test_df['COMPANY_TYPE_CN'] = test_df['COMPANY_TYPE'].str.split('地址').str[0]
-        test_df['COMPANY_TYPE_CN'] = test_df['COMPANY_TYPE'].str.split('|').str[0]
-        test_df['COMPANY_TYPE_CN'] = test_df['COMPANY_TYPE'].str.replace(r'型', '', regex=False)
+        
+        test_df['ESTABLISHED_IN'] = test_df['ESTABLISHED_IN'].str.strip()
+        test_df['ESTABLISHED_IN'] = test_df['ESTABLISHED_IN'].str.replace('Autorità di', '-', regex=False)
+        test_df['REGISTRATION_INSTITUTION'] = test_df['ESTABLISHED_IN'].str.split(' - ').str[1]
+        test_df['ESTABLISHED_IN'] = test_df['ESTABLISHED_IN'].str.split(' - ').str[0]
 
-        test_df['SELLER_ADDRESS_CN'] = test_df['住 所'].fillna('') + test_df['住 ”所'].fillna('') + test_df['住所'].fillna('') + test_df['地址'].fillna('')
-        test_df['SELLER_ADDRESS_CN'] = test_df['SELLER_ADDRESS_CN'].str.split('法定').str[0]
-        test_df['SELLER_ADDRESS_CN'] = test_df['SELLER_ADDRESS_CN'].str.split('|').str[0]
-        test_df['SELLER_ADDRESS_CN'] = test_df['SELLER_ADDRESS_CN'].str.upper()
+        # test_df['ESTABLISHED_IN'] = test_df['ESTABLISHED_IN'].str.replace(r'..*$', '', regex=True)
+        # test_df['ESTABLISHED_IN'] = test_df['ESTABLISHED_IN'].str.replace(r' .*$', '', regex=True)
+        # test_df['ESTABLISHED_IN'] = test_df['ESTABLISHED_IN'].str.replace(r'.', '', regex=False)
+     
+        test_df['SELLER_ADDRESS'] = test_df['Address']
 
-        test_df['LEGAL_REPRESENTATIVE_CN'] = test_df['法定代表人'].str.split('成').str[0]
+        try:
+            test_df['SELLER_EMAIL'] = test_df['Email']
+        except KeyError:
+            test_df['SELLER_EMAIL'] = test_df['E-mail']
 
+        test_df['SELLER_EMAIL'] = test_df['SELLER_EMAIL'].str.strip()
+        test_df['SELLER_EMAIL'] = test_df['SELLER_EMAIL'].str.split(' ').str[0]
 
+        # test_df['SELLER_EMAIL'] = test_df['SELLER_EMAIL'].str.replace(r'outlook con.*$', 'outlook.com', regex=True)
+        # test_df['SELLER_EMAIL'] = test_df['SELLER_EMAIL'].str.replace(r'.com.*$', '.com', regex=True)
+        # test_df['SELLER_EMAIL'] = test_df['SELLER_EMAIL'].str.replace(r'0163.*$', '@163.com', regex=True)
+        # test_df['SELLER_EMAIL'] = test_df['SELLER_EMAIL'].str.replace(r'@ ', '@', regex=True)
+        # test_df['SELLER_EMAIL'] = test_df['SELLER_EMAIL'].str.replace(r' outlook', '@outlook', regex=True)
+        # test_df['SELLER_EMAIL'] = test_df['SELLER_EMAIL'].str.replace(r'00g.com', '@qq.com', regex=True)
+  
+        try:
+            test_df['SELLER_TEL_N'] = test_df['Numero di telefono']
+        except KeyError:
+            test_df['SELLER_TEL_N'] = test_df['Phone Number']
 
-        test_df['BUSINESS_DESCRIPTION'] = test_df['经营范围'].fillna('') + test_df['经营学围'].fillna('')
+        try:
+            test_df['LEGAL_REPRESENTATIVE'] = test_df['Rappresentante legale']
+        except KeyError:
+            test_df['LEGAL_REPRESENTATIVE'] = test_df['Legal Representative']
 
-        test_df['ESTABLISHED_IN'] = test_df['成立时间'].str.split('注').str[0]
-        test_df['ESTABLISHED_IN'] = test_df['ESTABLISHED_IN'].str.split('|').str[0]
+        test_df['BUSINESS_DESCRIPTION'] = test_df['Business Scope']
 
-        test_df['INITIAL_CAPITAL'] = test_df['注册资本'].str.split('营').str[0]
-        test_df['INITIAL_CAPITAL'] = test_df['INITIAL_CAPITAL'].str.split('|').str[0]
-
-        test_df['EXPIRATION_DATE'] = test_df['营业期限'].str.split('经').str[0]
-        test_df['EXPIRATION_DATE'] = test_df['EXPIRATION_DATE'].str.split('|').str[0]
-
-        test_df['REGISTRATION_INSTITUTION'] = test_df['登记机关'].str.split('核').str[0]
-        test_df['REGISTRATION_INSTITUTION'] = test_df['REGISTRATION_INSTITUTION'].str.split('|').str[0]
-        test_df['REGISTRATION_INSTITUTION'] = test_df['REGISTRATION_INSTITUTION'].str.split('注').str[0]
-        test_df['SELLER_ADDRESS_CITY'] = '-'
-        test_df['SHOP_NAMEextracted'] = '-'
-        test_df['SHOP_URLextracted'] = '-'
 
     
     # Concatenate them into a single DataFrame
