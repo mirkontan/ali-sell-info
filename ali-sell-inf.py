@@ -184,7 +184,8 @@ if uploaded_images:
         st.subheader("Entire Extracted Text")
         st.write(ocr_text)
 
-
+    st.header('EXTRACTED DATA PER IMAGE')
+    st.write(extracted_data_per_image)
     df_extraction_overall = pd.concat([df_extraction_aliexpress, df_extraction_test], ignore_index=True)
     
     st.header('df EXTRACTION TEST')
