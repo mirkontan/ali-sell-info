@@ -76,7 +76,8 @@ if uploaded_images:
             st.write(ocr_text)
             if 'Informazioni' in ocr_text:
                 platform = 'ALIEXPRESS'
-            else 
+            else:
+                platform = 'UNKNOWN'
            
         else:
             row = df_urls.iloc[i]  # We want to match with the first row of df_urls
