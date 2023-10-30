@@ -44,7 +44,7 @@ if uploaded_xlsx:
     # Reset the index of df_urls
     df_urls = df_urls.reset_index(drop=True)
 
-    # # st.write(df_urls)
+    # st.write(df_urls)
     st.sidebar.subheader(f"{len(df_urls['SELLER'])} seller(s) record(s) have been uploaded.")
 
 if uploaded_images:
@@ -71,7 +71,7 @@ if uploaded_images:
 
         if not uploaded_xlsx:  
             # Check platform in the OCR text
-            # # st.write(ocr_text)
+            # st.write(ocr_text)
             if 'Business information' in ocr_text:
                 platform = 'ALIEXPRESS'
             else:
@@ -155,7 +155,7 @@ if uploaded_images:
             # st.write(ocr_text)
             # Split the text into lines
             lines = ocr_text.splitlines()
-            # # st.write(lines)
+            # st.write(lines)
             data = {}
             current_key = None
 
@@ -174,26 +174,26 @@ if uploaded_images:
             extracted_data_per_image_test = pd.DataFrame([data])
             extracted_data_per_image_test['PLATFORM'] = 'UNKNOWN'
             extracted_data_per_image_test['FILENAME'] = uploaded_image.name
-            # # st.write(extracted_data_per_image_test)
-            # # st.write(data)
+            # st.write(extracted_data_per_image_test)
+            # st.write(data)
             df_extraction_test = pd.concat([df_extraction_test, extracted_data_per_image_test], ignore_index=True)
 
             
         # Display the entire extracted text
         st.subheader("Entire Extracted Text")
-        # # st.write(ocr_text)
+        # st.write(ocr_text)
 
-    st.header('EXTRACTED DATA PER IMAGE')
-    # # st.write(extracted_data_per_image)
+    # st.header('EXTRACTED DATA PER IMAGE')
+    # st.write(extracted_data_per_image)
     df_extraction_overall = pd.concat([df_extraction_aliexpress, df_extraction_test], ignore_index=True)
     
-    st.header('df EXTRACTION TEST')
-    # # st.write(df_extraction_test)
-    st.header('DF EXTRACTION ALIEXPRESS')
-    # # st.write(df_extraction_aliexpress)
+    # st.header('df EXTRACTION TEST')
+    # st.write(df_extraction_test)
+    # st.header('DF EXTRACTION ALIEXPRESS')
+    # st.write(df_extraction_aliexpress)
 
-    st.header('DF EXTRACTION OVERALL')
-    # # st.write(df_extraction_overall)
+    # st.header('DF EXTRACTION OVERALL')
+    # st.write(df_extraction_overall)
 
     # Copy the DataFrame
     df_sellers_info = df_extraction_overall.copy()
@@ -376,7 +376,7 @@ if uploaded_images:
     # Concatenate them into a single DataFrame
     sellers_info_df = pd.concat([aliexpress_df, test_df], ignore_index=True)
     
-    st.header('SELLER INFO-1')
+    # st.header('SELLER INFO-1')
     # st.write(sellers_info_df)
     
     # Count the number of rows in sellers_info_df
@@ -410,8 +410,8 @@ if uploaded_images:
     sellers_info_df = sellers_info_df[['SELLER_BUSINESS_NAME', 'SELLER_VAT_N', 'COMPANY_TYPE', 'LEGAL_REPRESENTATIVE', 'SELLER_ADDRESS', 'SELLER_COUNTRY', 'SELLER_PROVINCE', 'SELLER_CITY', 'ESTABLISHED_IN', 'BUSINESS_DESCRIPTION', 'SELLER_EMAIL', 'SELLER_TEL_N']]
 
     # Display the DataFrame with extracted text
-    st.subheader("Extracted Text Data")
-    # st.write(sellers_info_df)
+    st.header("Extracted Sellers Info Data")
+    st.write(sellers_info_df)
 
 
     # Add the download link
