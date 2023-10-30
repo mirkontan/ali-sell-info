@@ -11,7 +11,7 @@ from PIL import Image
 # Define a function to generate a timestamp
 def generate_timestamp():
     now = datetime.datetime.now()
-    return now.strftime("%Y-%m-%d_%H-%M-%S")
+    return now.strftime("%Y-%m-%d_%H-%M")
 
 def remove_whitespace(df, columns):
     for column in columns:
@@ -19,10 +19,10 @@ def remove_whitespace(df, columns):
 
 
 # Set the page title
-st.set_page_config(page_title='Sellers Business Licence OCR Reader', layout='wide')
+st.set_page_config(page_title='Sellers Business Licence - OCR Reader', layout='wide')
 
 # Create a Streamlit app
-st.markdown("<h1 style='text-align: center;'>Sellers Business Licence OCR Reader</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>Sellers Business Licence - OCR Reader</h1>", unsafe_allow_html=True)
 
 # Upload Screenshots of Visure
 st.sidebar.header('Upload screeshots of Sellers Info:')
@@ -206,10 +206,10 @@ if uploaded_images:
 # ------------------------------------------------------------
 
     if aliexpress_df.empty:
-        # Create new columns based on the items in targets_taobao
+        # Create new columns based on the items in targets_aliexpress
         # targets_aliexpress = ['Nome della società', 'Nome della socletà']
         for target in targets_aliexpress:
-            jd_df[target] = None  # Add new columns with None values
+            aliexpress_df[target] = None  # Add new columns with None values
     else:
         try:
             aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['Nome della società']
@@ -353,7 +353,8 @@ if uploaded_images:
         ('Guangzhou', 'Guangdong', 'Mainland China'),
         ('Bengbu', 'Anhui', 'Mainland China'),
         ('Nanning', 'Guangxi', 'Mainland China'),
-        ('Shanghai', 'Shanghai', 'Mainland China')
+        ('Shanghai', 'Shanghai', 'Mainland China'),
+        ('Wenzhou', 'Zhejiang', 'Mainland China')
     }
     # Function to extract city, province, and country
     def extract_city_and_country(address):
