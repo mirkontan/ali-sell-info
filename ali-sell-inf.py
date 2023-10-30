@@ -19,10 +19,10 @@ def remove_whitespace(df, columns):
 
 
 # Set the page title
-st.set_page_config(page_title='Chinese Text OCR', layout='wide')
+st.set_page_config(page_title='Sellers Business Licence OCR Reader', layout='wide')
 
 # Create a Streamlit app
-st.markdown("<h1 style='text-align: center;'>Chinese Platform - Sellers Business Licence OCR Reader</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>Sellers Business Licence OCR Reader</h1>", unsafe_allow_html=True)
 
 # Upload Screenshots of Visure
 st.sidebar.header('Upload screeshots of Sellers Info:')
@@ -69,9 +69,7 @@ if uploaded_images:
         ocr_text = pytesseract.image_to_string(image)
        
 
-        if not uploaded_xlsx:
-            # !!!! TENERE TMALL SEMPRE PER ULTIMA !!!!! 
-            # ALTRIMENTI NON RICONOSCE LE ALTRE PIATTAFORME (non capisco perché)    
+        if not uploaded_xlsx:  
             # Check platform in the OCR text
             st.write(ocr_text)
             if 'Informazioni' in ocr_text:
@@ -144,40 +142,6 @@ if uploaded_images:
         
 
 
-
-
-
-
-            # # Crop the grayscale image using OpenCV
-            # # Define the coordinates for cropping (left, top, width, height)
-            # left = 125
-            # top = 80
-            # width = 500  # Adjust based on your needs
-            # height = 300  # Adjust based on your needs
-            # cropped_image = grayscale_image[top:top+height, left:left+width]
-            # # Now you can perform OCR on the grayscale image using pytesseract
-            # ocr_text = pytesseract.image_to_string(cropped_image, lang='eng')
-            # st.image(cropped_image)
-            # st.write('grey image ocr text')
-            # st.write(ocr_text)
-     
-
-            # # Split the text into lines
-            # lines = ocr_text.splitlines()
-            # # Split the text into lines
-            # lines = ocr_text.splitlines()
-            # st.write(lines)
-            # data = {}
-            # for line in lines:
-            #     parts = line.split()
-            #     if len(parts) == 2:
-            #         key, value = parts
-            #         data[key] = value
-            # st.write(data)
-
-
-            # List of target texts
-
         if extracted_data_per_image['PLATFORM'] == 'TEST' or None:
             targets = targets_test
             # Perform OCR on the entire uploaded image (IT language)
@@ -218,340 +182,24 @@ if uploaded_images:
         st.subheader("Entire Extracted Text")
         st.write(ocr_text)
 
-        for word in targets:
-            # Find the coordinates where the text is found
-            target_text = word
-            text_location = [(m.start(0), m.end(0)) for m in re.finditer(target_text, ocr_text)]
 
-            if text_location:
-                extracted_texts = ''
-                if extracted_data_per_image['PLATFORM'] == 'TMALL' or None:
-                    # # Shift the coordinates to the right by 7 pixels
-                    # roi_data = [(start + 4, end + 50) for start, end in text_location]
-                    # extracted_texts = [ocr_text[start:end] for start, end in roi_data]
-                    pass
-                elif extracted_data_per_image['PLATFORM'] == 'TAOBAO':
-                    # Shift the coordinates to the right by 10 pixels
-                    roi_data = [(start + 10, end + 150) for start, end in text_location]
-                    extracted_texts = [ocr_text[start:end] for start, end in roi_data]
-               
-                elif extracted_data_per_image['PLATFORM'] == 'JD COM':
-                    # if word == '京东商城网店':
-                    #     # Shift the coordinates to the left by 50 pixels
-                    #     roi_data = [(start - 50, end - 5) for start, end in text_location]
-                    #     extracted_texts = [ocr_text[start:end] for start, end in roi_data]
-                    # else:
-                    #     # Shift the coordinates to the right by 10 pixels
-                    #     roi_data = [(start + 6, end + 150) for start, end in text_location]
-                    #     extracted_texts = [ocr_text[start:end] for start, end in roi_data]
-                        # Shift the coordinates to the right by 10 pixels
-                        roi_data = [(start + 6, end + 150) for start, end in text_location]
-                        extracted_texts = [ocr_text[start:end] for start, end in roi_data]
-
-
-                elif extracted_data_per_image['PLATFORM'] == 'CHINAALIBABA':
-                    # Shift the coordinates to the right by 5 pixels
-                    roi_data = [(start + 5, end + 150) for start, end in text_location]  # Extract text using roi_data
-                    extracted_texts = [ocr_text[start:end] for start, end in roi_data]
-
-                elif extracted_data_per_image['PLATFORM'] == 'TEST':
-                    # Shift the coordinates to the right by 7 pixels
-                    roi_data = [(start + 0, end + 50) for start, end in text_location]
-                    extracted_texts = [ocr_text[start:end] for start, end in roi_data]
-                
-                elif extracted_data_per_image['PLATFORM'] == 'ALIEXPRESS':
-                    pass
-
-                if extracted_texts:
-                    st.write(f"Extracted Text for '{target_text}' (Shifted by pixels to the right):")
-                    st.write(extracted_texts)
-                    # Assign the extracted text to the dictionary
-                    extracted_data_per_image[word] = extracted_texts
-            else:
-                # If target text is not found, assign an empty list
-                extracted_data_per_image[word] = ['']
-        
-        # Create a DataFrame for the extracted data of this image
-        df_extraction_image = pd.DataFrame(extracted_data_per_image)
-        
-        st.write( 'df_extraction_image')
-        st.write(df_extraction_image)
-        # Append the DataFrame for this image to the main df_extraction
-        df_extraction = pd.concat([df_extraction, df_extraction_image], ignore_index=True)
-    
-
-    df_extraction = df_extraction[df_extraction['PLATFORM'] != 'ALIEXPRESS']   
-    df_extraction = df_extraction[df_extraction['PLATFORM'] != 'TMALL']   
-    df_extraction_overall = pd.concat([df_extraction, df_extraction_aliexpress], ignore_index=True)
+    df_extraction_overall = pd.concat([df_extraction_aliexpress, df_extraction_test], ignore_index=True)
     df_extraction_overall = pd.concat([df_extraction_overall, df_extraction_tmall], ignore_index=True)
-    st.header('df extraXTION')
-    st.write(df_extraction)
-    st.header('df extraXTION ALIEXPRESS')
+    st.header('df EXTRACTION TEST')
+    st.write(df_extraction_test)
+    st.header('DF EXTRACTION ALIEXPRESS')
     st.write(df_extraction_aliexpress)
-    st.header('df extraXTION TMALL')
-    st.write(df_extraction_tmall)
 
-    st.header('df extraXTION OVERALL')
+    st.header('DF EXTRACTION OVERALL')
     st.write(df_extraction_overall)
 
     # Copy the DataFrame
     df_sellers_info = df_extraction_overall.copy()
 
-    tmall_df = df_sellers_info[df_sellers_info['PLATFORM'].isin(['TMALL', None])]
-    taobao_df = df_sellers_info[df_sellers_info['PLATFORM'] == 'TAOBAO']
-    chinaalibaba_df = df_sellers_info[df_sellers_info['PLATFORM'] == 'CHINAALIBABA']
-    jd_df = df_sellers_info[df_sellers_info['PLATFORM'] == 'JD COM']
+    
     aliexpress_df = df_sellers_info[df_sellers_info['PLATFORM'] == 'ALIEXPRESS']
     test_df = df_sellers_info[df_sellers_info['PLATFORM'] == 'TEST']
     
-
-
-# ------------------------------------------------------------
-#                             TMALL
-# ------------------------------------------------------------
-
-    if tmall_df.empty:
-        # Create new columns based on the items in targets_taobao
-        for target in targets_tmall:
-            tmall_df[target] = None  # Add new columns with None values
-    else:
-
-        # # Check for missing values and replace them with an empty string
-        tmall_df['企业注册号'].fillna('', inplace=True)
-        tmall_df['SELLER_VAT_N'] = tmall_df['企业注册号']
-        # tmall_df['SELLER_VAT_N'] = tmall_df['SELLER_VAT_N'].str.split('/').str[0]
-        # tmall_df['SELLER_VAT_N'] = tmall_df['SELLER_VAT_N'].str.split(':').str[1]
-            # Remove all white spaces in the '企业注册号' column
-        tmall_df['SELLER_VAT_N'] = tmall_df['SELLER_VAT_N'].astype(str)
-        tmall_df['SELLER_VAT_N'] = tmall_df['SELLER_VAT_N'].str.replace(r'\s', '', regex=True)
-
-        tmall_df['SELLER_BUSINESS_NAME_CN'] = tmall_df['企业名称']
-        # tmall_df['SELLER_BUSINESS_NAME_CN'] = tmall_df['SELLER_BUSINESS_NAME_CN'].str.replace(r':', '', regex=False)
-        # tmall_df['SELLER_BUSINESS_NAME_CN'] = tmall_df['SELLER_BUSINESS_NAME_CN'].str.replace(r';', '', regex=False)
-        # tmall_df['SELLER_BUSINESS_NAME_CN'] = tmall_df['SELLER_BUSINESS_NAME_CN'].str.replace(r'\s', '', regex=True)
-        
-        tmall_df['COMPANY_TYPE_CN'] = tmall_df['类 型'].fillna('') + tmall_df['类 ”型'].fillna('') + tmall_df['类 。 型'].fillna('')
-        tmall_df['COMPANY_TYPE_CN'] = tmall_df['COMPANY_TYPE_CN'].str.split('住').str[0]
-        tmall_df['COMPANY_TYPE_CN'] = tmall_df['COMPANY_TYPE_CN'].str.split('|').str[0]
-        tmall_df['COMPANY_TYPE_CN'] = tmall_df['COMPANY_TYPE_CN'].str.replace(r'型', '', regex=False)
-        tmall_df['COMPANY_TYPE_CN'] = tmall_df['COMPANY_TYPE_CN'].str.replace(r':', '', regex=False)
-        tmall_df['COMPANY_TYPE_CN'] = tmall_df['COMPANY_TYPE_CN'].str.replace(r';', '', regex=False)
-
-
-        tmall_df['SELLER_ADDRESS_CN'] = tmall_df['住所']
-        # tmall_df['SELLER_ADDRESS_CN'] = tmall_df['SELLER_ADDRESS_CN'].str.split('法定').str[0]
-        # tmall_df['SELLER_ADDRESS_CN'] = tmall_df['SELLER_ADDRESS_CN'].str.split('|').str[0]
-        # tmall_df['SELLER_ADDRESS_CN'] = tmall_df['SELLER_ADDRESS_CN'].str.upper()
-        # tmall_df['SELLER_ADDRESS_CN'] = tmall_df['SELLER_ADDRESS_CN'].str.replace(r':', '', regex=False)
-        # tmall_df['SELLER_ADDRESS_CN'] = tmall_df['SELLER_ADDRESS_CN'].str.replace(r';', '', regex=False)
-        # tmall_df['SELLER_ADDRESS_CN'] = tmall_df['SELLER_ADDRESS_CN'].str.replace(r'\s', '', regex=True)
-
-        tmall_df['LEGAL_REPRESENTATIVE_CN'] = tmall_df['法定代表人'].str.split('成').str[0]
-        tmall_df['LEGAL_REPRESENTATIVE_CN'] = tmall_df['LEGAL_REPRESENTATIVE_CN'].str.split('|').str[0]
-        tmall_df['LEGAL_REPRESENTATIVE_CN'] = tmall_df['LEGAL_REPRESENTATIVE_CN'].str.replace(r'\s', '', regex=True)
-        tmall_df['LEGAL_REPRESENTATIVE_CN'] = tmall_df['LEGAL_REPRESENTATIVE_CN'].str.replace(r'人:', '', regex=False)
-        tmall_df['LEGAL_REPRESENTATIVE_CN'] = tmall_df['LEGAL_REPRESENTATIVE_CN'].str.replace(r'人;', '', regex=False)
-
-
-
-        tmall_df['BUSINESS_DESCRIPTION'] = tmall_df['经营范围'].fillna('') + tmall_df['经营学围'].fillna('')
-
-        tmall_df['ESTABLISHED_IN'] = tmall_df['成立时间'].str.split('注').str[0]
-        tmall_df['ESTABLISHED_IN'] = tmall_df['ESTABLISHED_IN'].str.split('|').str[0]
-
-        tmall_df['INITIAL_CAPITAL'] = tmall_df['注册资本'].str.split('营').str[0]
-        tmall_df['INITIAL_CAPITAL'] = tmall_df['INITIAL_CAPITAL'].str.split('|').str[0]
-
-        tmall_df['EXPIRATION_DATE'] = tmall_df['营业期限'].str.split('至').str[1]
-
-        tmall_df['REGISTRATION_INSTITUTION'] = tmall_df['登记机关'].str.split('核').str[0]
-        tmall_df['REGISTRATION_INSTITUTION'] = tmall_df['REGISTRATION_INSTITUTION'].str.split('|').str[0]
-        tmall_df['REGISTRATION_INSTITUTION'] = tmall_df['REGISTRATION_INSTITUTION'].str.split('注').str[0]
-        tmall_df['SELLER_ADDRESS_CITY'] = '-'
-        tmall_df['SHOP_NAMEextracted'] = '-'
-        tmall_df['SHOP_URLextracted'] = '-'       
-        st.header(tmall_df)
-        st.dataframe(tmall_df)
-
-# ------------------------------------------------------------
-#                             TAOBAO
-# ------------------------------------------------------------
-   
-    # Check if taobao_df is empty
-    if taobao_df.empty:
-        # Create new columns based on the items in targets_taobao
-        for target in targets_taobao:
-            taobao_df[target] = None  # Add new columns with None values
-    else:
-    # # Check for missing values and replace them with an empty string
-        taobao_df['注册号'].fillna('', inplace=True)
-        taobao_df['SELLER_VAT_N'] = taobao_df['注册号'].str.split('注册').str[0]
-        taobao_df['SELLER_VAT_N'] = taobao_df['SELLER_VAT_N'].str.split('/').str[0]
-            # Remove all white spaces in the '企业注册号' column
-        taobao_df['SELLER_VAT_N'] = taobao_df['SELLER_VAT_N'].str.replace(r'\s', '', regex=True)
-
-        taobao_df['SELLER_BUSINESS_NAME_CN'] = taobao_df['公司名称'].str.split('统一').str[0]
-        taobao_df['SELLER_BUSINESS_NAME_CN'] = taobao_df['SELLER_BUSINESS_NAME_CN'].str.replace(r'\s', '', regex=True)
-
-        taobao_df['COMPANY_TYPE'] = taobao_df['类型'].str.split('经营').str[0]
-        taobao_df['COMPANY_TYPE'] = taobao_df['COMPANY_TYPE'].str.replace(r'\s', '', regex=True)    
-
-        taobao_df['SELLER_ADDRESS_CN'] = taobao_df['地址'].str.split('法定').str[0]
-        taobao_df['SELLER_ADDRESS_CN'] = taobao_df['SELLER_ADDRESS_CN'].str.upper()
-        taobao_df['SELLER_ADDRESS_CN'] = taobao_df['SELLER_ADDRESS_CN'].str.replace(r'\s', '', regex=True)    
-
-        taobao_df['LEGAL_REPRESENTATIVE_CN'] = taobao_df['法定代表人'].str.split('公司').str[0]
-        taobao_df['LEGAL_REPRESENTATIVE_CN'] = taobao_df['LEGAL_REPRESENTATIVE_CN'].str.replace(r'\s', '', regex=True)    
-
-        taobao_df['BUSINESS_DESCRIPTION'] = taobao_df['经营范围'].fillna('') + taobao_df['经营学围'].fillna('')
-
-        taobao_df['ESTABLISHED_IN'] = taobao_df['经营期限自'].str.split('经').str[0]
-        taobao_df['ESTABLISHED_IN'] = taobao_df['ESTABLISHED_IN'].str.replace(r'\s', '', regex=True)    
-
-        taobao_df['INITIAL_CAPITAL'] = taobao_df['注册资本'].str.split('营').str[0]
-        taobao_df['INITIAL_CAPITAL'] = taobao_df['INITIAL_CAPITAL'].str.split('|').str[0]
-
-        taobao_df['EXPIRATION_DATE'] = taobao_df['营业期限'].str.split('经').str[0]
-        taobao_df['EXPIRATION_DATE'] = taobao_df['EXPIRATION_DATE'].str.replace(r'\s', '', regex=True)    
-
-        taobao_df['REGISTRATION_INSTITUTION'] = taobao_df['登记机关'].str.split('注').str[0]
-        taobao_df['REGISTRATION_INSTITUTION'] = taobao_df['REGISTRATION_INSTITUTION'].str.replace(r'\s', '', regex=True)        
-        taobao_df['SELLER_ADDRESS_CITY'] = '-'
-        taobao_df['SHOP_NAMEextracted'] = '-'
-        taobao_df['SHOP_URLextracted'] = '-'
-        # st.dataframe(taobao_df)
-    
-# ------------------------------------------------------------
-#                             1688
-# ------------------------------------------------------------
-    if chinaalibaba_df.empty:
-            # Create new columns based on the items in targets_taobao
-            for target in targets_chinaalibaba:
-                chinaalibaba_df[target] = None  # Add new columns with None values
-    else:
-        # # Check for missing values and replace them with an empty string
-        chinaalibaba_df['统一社会'].fillna('', inplace=True)
-        chinaalibaba_df['SELLER_VAT_N'] = chinaalibaba_df['统一社会'].str.split('注册号').str[1]
-        chinaalibaba_df['SELLER_VAT_N'] = chinaalibaba_df['SELLER_VAT_N'].str.split('企业').str[0]
-        chinaalibaba_df['SELLER_VAT_N'] = chinaalibaba_df['SELLER_VAT_N'].str.split('登记').str[0]
-        chinaalibaba_df['SELLER_VAT_N'] = chinaalibaba_df['SELLER_VAT_N'].str.replace(r'\s', '', regex=True)
-        # chinaalibaba_df['SELLER_VAT_N'] = chinaalibaba_df['SELLER_VAT_N'].astype(str)
-        # chinaalibaba_df['SELLER_VAT_N'] = chinaalibaba_df['SELLER_VAT_N'].str.split('企业').str[0]
-       
-        # chinaalibaba_df['SELLER_BUSINESS_NAME_CN'] = chinaalibaba_df['公司名称'].str.split('注').str[0]
-        chinaalibaba_df['SELLER_BUSINESS_NAME_CN'] = chinaalibaba_df['公司名称'].str.split('注册').str[0]
-        # chinaalibaba_df['SELLER_BUSINESS_NAME_CN'] = chinaalibaba_df['SELLER_BUSINESS_NAME_CN'].str.replace(r'\s', '', regex=True)
-        
-        chinaalibaba_df['COMPANY_TYPE_CN'] = chinaalibaba_df['法定代表人'].str.split('类').str[1]
-        chinaalibaba_df['COMPANY_TYPE_CN'] = chinaalibaba_df['COMPANY_TYPE_CN'].str.split('登记').str[0]
-        chinaalibaba_df['COMPANY_TYPE_CN'] = chinaalibaba_df['COMPANY_TYPE_CN'].str.split('上册').str[0]
-        chinaalibaba_df['COMPANY_TYPE_CN'] = chinaalibaba_df['COMPANY_TYPE_CN'].str.replace(r'主', '', regex=True)
-        chinaalibaba_df['COMPANY_TYPE_CN'] = chinaalibaba_df['COMPANY_TYPE_CN'].str.replace(r'串', '', regex=True)
-        chinaalibaba_df['COMPANY_TYPE_CN'] = chinaalibaba_df['COMPANY_TYPE_CN'].str.replace(r'估', '', regex=True)
-        chinaalibaba_df['COMPANY_TYPE_CN'] = chinaalibaba_df['COMPANY_TYPE_CN'].str.replace(r'型', '', regex=True)
-        chinaalibaba_df['COMPANY_TYPE_CN'] = chinaalibaba_df['COMPANY_TYPE_CN'].str.replace(r'\s', '', regex=True)
-
-        chinaalibaba_df['SELLER_ADDRESS_CN'] = chinaalibaba_df['地址'].str.split('成立').str[0]
-        chinaalibaba_df['SELLER_ADDRESS_CN'] = chinaalibaba_df['SELLER_ADDRESS_CN'].str.split('|').str[0]
-        chinaalibaba_df['SELLER_ADDRESS_CN'] = chinaalibaba_df['SELLER_ADDRESS_CN'].str.split('注册').str[0]
-        chinaalibaba_df['SELLER_ADDRESS_CN'] = chinaalibaba_df['SELLER_ADDRESS_CN'].str.replace(r'\s', '', regex=True)
-        chinaalibaba_df['SELLER_ADDRESS_CN'] = chinaalibaba_df['SELLER_ADDRESS_CN'].str.upper()
-
-        chinaalibaba_df['LEGAL_REPRESENTATIVE_CN'] = chinaalibaba_df['地址'].str.split('企业').str[0]        
-        chinaalibaba_df['LEGAL_REPRESENTATIVE_CN'] = chinaalibaba_df['LEGAL_REPRESENTATIVE_CN'].str.split('表人').str[1]
-        chinaalibaba_df['LEGAL_REPRESENTATIVE_CN'] = chinaalibaba_df['LEGAL_REPRESENTATIVE_CN'].str.split('注册').str[0]
-        chinaalibaba_df['LEGAL_REPRESENTATIVE_CN'] = chinaalibaba_df['LEGAL_REPRESENTATIVE_CN'].str.replace(r'\s', '', regex=True)
-
-        chinaalibaba_df['BUSINESS_DESCRIPTION'] = chinaalibaba_df['经营范围'].fillna('') + chinaalibaba_df['经营学围'].fillna('')
-
-        chinaalibaba_df['ESTABLISHED_IN'] = chinaalibaba_df['注册资本'].str.split('成立日期').str[1]
-        chinaalibaba_df['ESTABLISHED_IN'] = chinaalibaba_df['ESTABLISHED_IN'].str.split('|').str[0]
-        chinaalibaba_df['ESTABLISHED_IN'] = chinaalibaba_df['ESTABLISHED_IN'].str.split('统一社会').str[0]
-        chinaalibaba_df['ESTABLISHED_IN'] = chinaalibaba_df['ESTABLISHED_IN'].str.strip()
-
-        chinaalibaba_df['INITIAL_CAPITAL'] = chinaalibaba_df['注册资本'].str.split('营').str[0]
-        chinaalibaba_df['INITIAL_CAPITAL'] = chinaalibaba_df['INITIAL_CAPITAL'].str.split('|').str[0]
-
-        chinaalibaba_df['EXPIRATION_DATE'] = chinaalibaba_df['营业期限'].str.split('经').str[0]
-        chinaalibaba_df['EXPIRATION_DATE'] = chinaalibaba_df['EXPIRATION_DATE'].str.split('|').str[0]
-        chinaalibaba_df['EXPIRATION_DATE'] = chinaalibaba_df['EXPIRATION_DATE'].str.replace(r'^.*至今', 'Active', regex=True)
-
-        chinaalibaba_df['REGISTRATION_INSTITUTION'] = chinaalibaba_df['登记机关'].str.split('营业').str[0]
-        chinaalibaba_df['REGISTRATION_INSTITUTION'] = chinaalibaba_df['REGISTRATION_INSTITUTION'].str.split('|').str[0]
-        chinaalibaba_df['SELLER_ADDRESS_CITY'] = '-'
-        chinaalibaba_df['SHOP_NAMEextracted'] = '-'
-        chinaalibaba_df['SHOP_URLextracted'] = '-'
-        # st.dataframe(chinaalibaba_df)    
-  
-# ------------------------------------------------------------
-#                             JD COM
-# ------------------------------------------------------------
-
-    if jd_df.empty:
-        # Create new columns based on the items in targets_taobao
-        for target in targets_jd:
-            jd_df[target] = None  # Add new columns with None values
-    else:
- #     ['卖家', '卖 家', ' '', '店铺名称']
-
-        # # Check for missing values and replace them with an empty string
-        jd_df['SELLER_VAT_N'] = jd_df['注册号'].fillna('') + jd_df['注则号'].fillna('') 
-        jd_df['SELLER_VAT_N'] = jd_df['SELLER_VAT_N'].str.split('丢定代').str[0]
-        jd_df['SELLER_VAT_N'] = jd_df['SELLER_VAT_N'].str.replace(r'法证代', '法定代', regex=True)
-        jd_df['SELLER_VAT_N'] = jd_df['SELLER_VAT_N'].str.split('法定代').str[0]
-        jd_df['SELLER_VAT_N'] = jd_df['SELLER_VAT_N'].str.replace(r'\。', '', regex=True)
-        jd_df['SELLER_VAT_N'] = jd_df['SELLER_VAT_N'].str.split(r'|').str[0]
-
-            # Remove all white spaces in the '企业注册号' column
-        jd_df['SELLER_VAT_N'] = jd_df['SELLER_VAT_N'].astype(str)
-        jd_df['SELLER_VAT_N'] = jd_df['SELLER_VAT_N'].str.replace(r'\s', '', regex=True)
-
-        jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['企业名称'].str.split('营业').str[0]
-        jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.replace(r'\s', '', regex=True)
-        jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.lstrip()
-        jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.split('有限公司').str[0] + '有限公司'
-        jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.split('综合').str[0]
-        jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.lstrip()
-
-        jd_df['SELLER_ADDRESS_CITY'] = jd_df['所在地'].str.split('市').str[0] + '市'
-        jd_df['SELLER_ADDRESS_CITY'] = jd_df['SELLER_ADDRESS_CITY'].str.lstrip()
-        jd_df['SELLER_ADDRESS_CITY'] = jd_df['SELLER_ADDRESS_CITY'].str.replace(r'\。', '', regex=True)
-       
-        jd_df['SELLER_ADDRESS_CN'] = jd_df['地址'].str.split('店铺名称').str[0]
-        jd_df['SELLER_ADDRESS_CN'] = jd_df['SELLER_ADDRESS_CN'].str.lstrip()
-        jd_df['SELLER_ADDRESS_CN'] = jd_df['SELLER_ADDRESS_CN'].str.upper()
-        jd_df['SELLER_ADDRESS_CN'] = jd_df['SELLER_ADDRESS_CN'].str.replace(r'\s', '', regex=True)
-
-        jd_df['LEGAL_REPRESENTATIVE_CN'] = jd_df['法定代表人'].str.split('名:').str[1]
-        jd_df['LEGAL_REPRESENTATIVE_CN'] = jd_df['LEGAL_REPRESENTATIVE_CN'].astype(str).str.lstrip()
-        jd_df['LEGAL_REPRESENTATIVE_CN'] = jd_df['LEGAL_REPRESENTATIVE_CN'].str.slice(0, 3)
-
-        jd_df['LEGAL_REPRESENTATIVE_CN'] = jd_df['LEGAL_REPRESENTATIVE_CN'].str.replace(r'\s', '', regex=True)
-        jd_df['LEGAL_REPRESENTATIVE_CN'] = jd_df['LEGAL_REPRESENTATIVE_CN'].str.replace(r'人:', '', regex=False)
-        jd_df['LEGAL_REPRESENTATIVE_CN'] = jd_df['LEGAL_REPRESENTATIVE_CN'].str.replace(r'人;', '', regex=False)
-
-        jd_df['SHOP_NAMEextracted'] = jd_df['店铺名称']
-        jd_df['SHOP_NAMEextracted'] = jd_df['SHOP_NAMEextracted'].str.replace('店生网址', '店铺网址', regex=False)
-        jd_df['SHOP_NAMEextracted'] = jd_df['SHOP_NAMEextracted'].str.split('店铺网').str[0]
-        jd_df['SHOP_NAMEextracted'] = jd_df['SHOP_NAMEextracted'].str.lstrip()
-
-        jd_df['SHOP_URLextracted'] = jd_df['网址']
-        jd_df['SHOP_URLextracted'] = jd_df['SHOP_URLextracted'].str.split('html').str[0] + 'html'
-        jd_df['SHOP_URLextracted'] = jd_df['SHOP_URLextracted'].str.replace(r'indexr', 'index-', regex=False)
-        jd_df['SHOP_URLextracted'] = 'https://mall.jd.com/index-' + jd_df['SHOP_URLextracted'].str.split('index-').str[1]
-
-        jd_df['BUSINESS_DESCRIPTION'] = jd_df['经营范围'].fillna('') + jd_df['经营学围'].fillna('')
-
-        jd_df['ESTABLISHED_IN'] = jd_df['有效期'].str.split('注').str[0]
-        jd_df['ESTABLISHED_IN'] = jd_df['ESTABLISHED_IN'].str.split('|').str[0]
-
-        jd_df['INITIAL_CAPITAL'] = jd_df['注册资本'].str.split('营').str[0]
-        jd_df['INITIAL_CAPITAL'] = jd_df['INITIAL_CAPITAL'].str.split('|').str[0]
-
-        jd_df['EXPIRATION_DATE'] = jd_df['有效期'].str.split('经').str[0]
-        jd_df['EXPIRATION_DATE'] = jd_df['EXPIRATION_DATE'].str.split('|').str[0]
-        jd_df['COMPANY_TYPE_CN'] = '-'
-        jd_df['REGISTRATION_INSTITUTION'] = '-'
 
 
 # ------------------------------------------------------------
