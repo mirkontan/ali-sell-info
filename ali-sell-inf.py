@@ -258,9 +258,9 @@ if uploaded_images:
         aliexpress_df['SELLER_ADDRESS'] = aliexpress_df['Address']
 
         try:
-            aliexpress_df['SELLER_EMAIL'] = aliexpress_df['E-mail']
+            aliexpress_df['SELLER_EMAIL'] = aliexpress_df['Email']
         except KeyError:
-            aliexpress_df['SELLER_EMAIL'] = aliexpress_df['Emall']
+            aliexpress_df['SELLER_EMAIL'] = aliexpress_df['E-mail']
 
         aliexpress_df['SELLER_EMAIL'] = aliexpress_df['SELLER_EMAIL'].str.strip()
         aliexpress_df['SELLER_EMAIL'] = aliexpress_df['SELLER_EMAIL'].str.split(' ').str[0]
