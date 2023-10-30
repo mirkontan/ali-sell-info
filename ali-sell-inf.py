@@ -144,6 +144,7 @@ if uploaded_images:
             df_extraction_aliexpress = pd.concat([df_extraction, df_extraction_aliexpress], axis=1)
             
             st.write(df_extraction_aliexpress)
+            st.write(df_extraction)
             targets = targets_aliexpress
 
         
