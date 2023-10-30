@@ -331,154 +331,16 @@ if uploaded_images:
 
     
     # Concatenate them into a single DataFrame
-    sellers_info_df = pd.concat([tmall_df, taobao_df, chinaalibaba_df, jd_df, aliexpress_df, test_df], ignore_index=True)
-   
-   
-   
+    sellers_info_df = pd.concat([aliexpress_df, test_df], ignore_index=True)
+    
     st.header('SELLER INFO-1')
     st.write(sellers_info_df)
-
-
-
-    # Define the additional columns and their initial values
-    # additional_columns = {
-    #     "SELLER_BUSINESS_NAME_CN": '',
-    #     'SELLER_BUSINESS_NAME': '',
-    #     "COMPANY_TYPE_EN": '',
-    #     "SELLER_ADDRESS_CN": '',
-    #     "SELLER_PROVINCE_CN": '',
-    #     "SELLER_CITY_CN": '',
-    #     "LEGAL_REPRESENTATIVE_EN": '',
-    #     'SELLER_ADDRESS': '',
-    #     'SELLER_EMAIL': '',
-    #     'SELLER_TEL_N': ''}
-    # # Add the additional columns to the DataFrame
-    # for column_name, initial_value in additional_columns.items():
-    #     sellers_info_df[column_name] = initial_value
-
-
-
-    sellers_info_df['SHOP_NAMEextracted'] = sellers_info_df['SHOP_NAMEextracted'].fillna('-')
-    sellers_info_df['SHOP_URLextracted'] = sellers_info_df['SHOP_URLextracted'].fillna('-')
-    sellers_info_df.drop(['统一社会', '企业注册号', '注册号', '公司名称', '企业名称', '企业类型', '地址', '成立日期', '注册号', '类型', '类 型', '类 ”型', '类 。 型', '地址', '住所', '住 所', '住 ”所', '法定代表人', '经营期限自', '经营范围', '经营学围', '成立时间', '注册资本', '营业期限', '登记机关'], axis=1, inplace=True)
-    sellers_info_df['AIQICHA_URL'] = 'https://www.aiqicha.com/s?q=' + sellers_info_df['SELLER_VAT_N']
-    sellers_info_df.drop(['该准时间'], axis=1, inplace=True)
-    # Apply the translation function to the 'SELLER_BUSINESS_NAME_CN' column
-    # sellers_info_df['SELLER_BUSINESS_NAME'] = sellers_info_df['SELLER_BUSINESS_NAME'].astype(str)
-    # # Apply these transformations based on the 'PLATFORM' value
-    # is_aliexpress = sellers_info_df['PLATFORM'] == 'ALIEXPRESS'
-    # Apply transformations for 'ALIEXPRESS' platform
-    # sellers_info_df.loc[is_aliexpress, 'SELLER_BUSINESS_NAME'] = sellers_info_df.loc[is_aliexpress, 'SELLER_BUSINESS_NAME']
-    # Apply transformations for other platforms
-    # sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME_CN'] = sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME_CN'].str.replace(r'贸易批发商行', 'Wholesale Trading Company', regex=True)
-    # sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME_CN'] = sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME_CN'].str.replace(r'商行', 'Trading Company', regex=True)
-    # sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME'] = sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME_CN'].apply(translate_to_english)
-    # sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME'] = sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME'].str.replace(r'Trade Trading Company', 'Trading Company', regex=True)
-    # sellers_info_df.loc[~is_aliexpress, 'COMPANY_TYPE_EN'] = sellers_info_df.loc[~is_aliexpress, 'COMPANY_TYPE'].apply(translate_to_english)
-    # sellers_info_df.loc[~is_aliexpress, 'LEGAL_REPRESENTATIVE_EN'] = sellers_info_df.loc[~is_aliexpress, 'LEGAL_REPRESENTATIVE'].apply(translate_to_english)
-    import googletrans
-    from googletrans import Translator
-
-
-    # Create a Translator instance
-    translator = Translator()
-
-    def fill_empty_with_translation(df, target_column, source_column):
-        for index, row in df.iterrows():
-            if pd.isna(row[target_column]) and not pd.isna(row[source_column]):
-                try:
-                    translation = translator.translate(row[source_column], src='zh-cn', dest='en')
-                    df.at[index, target_column] = translation.text
-                except Exception as e:
-                    print(f"Translation error: {e}")
-
-    fill_empty_with_translation(sellers_info_df, 'SELLER_BUSINESS_NAME', 'SELLER_BUSINESS_NAME_CN')
-    fill_empty_with_translation(sellers_info_df, 'SELLER_ADDRESS', 'SELLER_ADDRESS_CN')
-    fill_empty_with_translation(sellers_info_df, 'COMPANY_TYPE', 'COMPANY_TYPE_CN')
-    fill_empty_with_translation(sellers_info_df, 'LEGAL_REPRESENTATIVE', 'LEGAL_REPRESENTATIVE_CN')
-
-    st.header('SELLERS INFO TRANSLATED')
-    st.write(sellers_info_df)
-
-
-    import jieba
-
-    # Sample Chinese addresses
-    addresses = sellers_info_df['SELLER_ADDRESS_CN']
-    # Function to extract city from an address using Jieba
-    def extract_city(address):
-        if isinstance(address, str):  # Check if it's a string
-            words = list(jieba.cut(address, cut_all=False))  # Segment the address into words
-            for word in words:
-                if word.endswith('市'):
-                    return word
-                elif word.endswith('州'):   
-                    return word + '市'
-                elif word.endswith('圳'):
-                    return word + '市'
-        return "City not found" # Return a default value if the city is not in the address
-    # Process each address
-    # Create an empty 'SELLER_CITY' column
-    sellers_info_df['SELLER_CITY_CN'] = ""
-
-    # Process each address and assign the extracted city to the 'SELLER_CITY' column
-    for index, address in enumerate(addresses):
-        city = extract_city(address)
-        sellers_info_df.at[index, 'SELLER_CITY_CN'] = city
     
-    # Sample dictionary of Chinese cities to provinces
-    city_to_province = {
-        "北京市": "北京市",
-        "上海市": "上海市",
-        "广州市": "广东省",
-        "深圳市": "广东省",
-        "杭州市": "浙江省",
-        "义乌市": "浙江省",
-        "南京市": "江苏省",
-        "成都市": "四川省",
-        "重庆市": "重庆市",
-        "武汉市": "湖北省",
-        "西安市": "陕西省",
-        "张家港市": "江苏省"
-    }
-
-    # Function to extract province from the city
-    def extract_province(city):
-        if city in city_to_province:
-            return city_to_province[city]
-        return "Province not found"  # Default value if the city is not in the mapping
-
-    # Apply the extract_province function to the 'SELLER_CITY' column
-    sellers_info_df['SELLER_PROVINCE_CN'] = sellers_info_df['SELLER_CITY_CN'].apply(extract_province)
-   
-    # Update 'SELLER_PROVINCE' and 'SELLER_CITY' if 'PLATFORM' is 'JD COM'
-    condition = sellers_info_df['PLATFORM'] == 'JD COM'
-    sellers_info_df.loc[condition & (sellers_info_df['SELLER_PROVINCE_CN'] == 'Province not found'), 'SELLER_PROVINCE_CN'] = sellers_info_df['SELLER_ADDRESS_CITY'].str.split('/').str[0]
-    sellers_info_df.loc[condition & (sellers_info_df['SELLER_CITY_CN'] == 'City not found'), 'SELLER_CITY_CN'] = sellers_info_df['SELLER_ADDRESS_CITY'].str.split('/').str[1]
-    
-    st.write(sellers_info_df)
-    # Apply the translation function to the 'SELLER_ADDRESS' column
-    sellers_info_df['SELLER_ADDRESS'] = sellers_info_df['SELLER_ADDRESS'].astype(str)
-    # Apply these transformations based on the 'PLATFORM' value
-    is_aliexpress = sellers_info_df['PLATFORM'] == 'ALIEXPRESS'
-    # Apply transformations for 'ALIEXPRESS' platform
-    sellers_info_df.loc[is_aliexpress, 'SELLER_ADDRESS'] = sellers_info_df.loc[is_aliexpress, 'SELLER_ADDRESS']
-    # Apply transformations for other platforms
-    sellers_info_df.loc[~is_aliexpress, 'SELLER_ADDRESS'] = sellers_info_df.loc[~is_aliexpress, 'SELLER_ADDRESS_CN'].apply(translate_to_english)
-    sellers_info_df['SELLER_CITY'] = sellers_info_df['SELLER_CITY_CN'].apply(translate_to_english)
-    sellers_info_df['SELLER_PROVINCE'] = sellers_info_df['SELLER_PROVINCE_CN'].apply(translate_to_english)
-   
-    # Sample DataFrame
-    # Replace '-' in COMPANY_TYPE with 'Limited liability company' where COMPANY_NAME contains 'Co., Ltd'
-    sellers_info_df.loc[sellers_info_df['COMPANY_TYPE'] == '-' & sellers_info_df['SELLER_BUSINESS_NAME'].str.contains('Co., Ltd'), 'COMPANY_TYPE'] = 'Limited liability company'
-    sellers_info_df = sellers_info_df[['SHOP_NAMEextracted', 'SHOP_URLextracted', 'SELLER', 'SELLER_URL', "PLATFORM", "FILENAME", "SELLER_VAT_N", "SELLER_BUSINESS_NAME", "COMPANY_TYPE", "SELLER_ADDRESS", 'SELLER_PROVINCE', "SELLER_CITY", 'SELLER_EMAIL', 'SELLER_TEL_N', "LEGAL_REPRESENTATIVE", "ESTABLISHED_IN", "INITIAL_CAPITAL", "EXPIRATION_DATE", 'AIQICHA_URL', "SELLER_BUSINESS_NAME_CN", "COMPANY_TYPE_CN", "SELLER_ADDRESS_CN", 'SELLER_PROVINCE_CN', 'SELLER_CITY_CN',  "LEGAL_REPRESENTATIVE_CN", "BUSINESS_DESCRIPTION",  "REGISTRATION_INSTITUTION"]]
-
     # Count the number of rows in sellers_info_df
     num_rows = sellers_info_df.shape[0]
 
     # Display the number of rows
     st.sidebar.subheader(f"{num_rows} seller(s) have been analysed")
-
 
     country_city_dict = {
         ('Shenzhen', 'Guangdong', 'Mainland China'),
