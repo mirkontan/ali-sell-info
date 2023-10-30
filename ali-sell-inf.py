@@ -228,7 +228,7 @@ if uploaded_images:
         aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['SELLER_BUSINESS_NAME'].str.strip()
 
         aliexpress_df['COMPANY_TYPE'] = aliexpress_df['SELLER_BUSINESS_NAME']
-        aliexpress_df['COMPANY_TYPE'] = aliexpress_df['COMPANY_TYPE'].str.replace(r'^.*Co.,', 'Limited Liability Company')
+        aliexpress_df['COMPANY_TYPE'] = aliexpress_df['COMPANY_TYPE'].str.replace(r'^.*Co.,', 'Limited Liability Company', regex=True)
 
         try:
             aliexpress_df['SELLER_VAT_N'] = aliexpress_df['Partita.IVA']
