@@ -138,8 +138,13 @@ if uploaded_images:
             st.write(data)
             # extracted_data_per_image_aliexpress_ = {**extracted_data_per_image, **extracted_data_per_image_aliexpress}
             df_extraction_aliexpress = pd.concat([df_extraction_aliexpress, extracted_data_per_image_aliexpress], ignore_index=True)
+            df_extraction = pd.concat([df_extraction, extracted_data_per_image], ignore_index=True)
+            
             st.header('DF EXTRACTION ALIEXPRESSSSS')
             st.write(df_extraction_aliexpress)
+            st.header('DF EXTRACTIONNNNNNNNNNNNNN')
+            st.write(df_extraction)
+
             targets = targets_aliexpress
         
 
