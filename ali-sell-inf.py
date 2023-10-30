@@ -255,7 +255,7 @@ if uploaded_images:
         # aliexpress_df['ESTABLISHED_IN'] = aliexpress_df['ESTABLISHED_IN'].str.replace(r' .*$', '', regex=True)
         # aliexpress_df['ESTABLISHED_IN'] = aliexpress_df['ESTABLISHED_IN'].str.replace(r'.', '', regex=False)
      
-        aliexpress_df['SELLER_ADDRESS'] = aliexpress_df['Indirizzo']
+        aliexpress_df['SELLER_ADDRESS'] = aliexpress_df['Address']
 
         try:
             aliexpress_df['SELLER_EMAIL'] = aliexpress_df['E-mail']
