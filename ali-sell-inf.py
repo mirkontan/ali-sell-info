@@ -184,7 +184,6 @@ if uploaded_images:
 
 
     df_extraction_overall = pd.concat([df_extraction_aliexpress, df_extraction_test], ignore_index=True)
-    df_extraction_overall = pd.concat([df_extraction_overall, df_extraction_tmall], ignore_index=True)
     st.header('df EXTRACTION TEST')
     st.write(df_extraction_test)
     st.header('DF EXTRACTION ALIEXPRESS')
