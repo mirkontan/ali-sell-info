@@ -91,7 +91,7 @@ if uploaded_images:
         
         # Create a selection box to allow the user to select the platform
         # Define the platform options
-        platform_options = ['TMALL', 'TAOBAO', 'CHINAALIBABA', 'JD COM', 'ALIEXPRESS', 'TEST']
+        platform_options = ['ALIEXPRESS', 'TEST']
         
         # Create a selection box with a unique key based on the filename
         selected_platform = st.selectbox(f'Select the platform for {uploaded_image.name}', platform_options, index=platform_options.index(extracted_data_per_image['PLATFORM']), key=f"selectbox_{i}")
@@ -102,70 +102,10 @@ if uploaded_images:
         st.image(uploaded_image, use_column_width=False, caption=f'Uploaded Image: {uploaded_image.name}', width=400)
         
         # Set the target words to look up in each image
-        targets_tmall = ['企业注册号', '企业名称', '类 型', '类 ”型', '类 。 型', '住所', '住 所', '住 ”所', '法定代表人', '成立时间', '注册资本', '营业期限', '经营范围', '经营学围', '登记机关', '该准时间']
-        targets_taobao = ['注册号', '公司名称', '类型',  '地址', '法定代表人', '经营期限自', '注册资本', '营业期限', '经营范围', '经营学围', '登记机关', '该准时间']
-        targets_chinaalibaba = ['统一社会', '公司名称', '企业类型', '类 ”型', '类 。 型', '地址', '法定代表人', '成立日期', '注册资本', '营业期限', '经营范围', '经营学围', '登记机关', '该准时间']
-        targets_jd = ['卖家', '卖 家', '企业名称', '注册号', '注则号', '所在地', '地址', '网址', '法定代表人', '注册资本', '有效期', '经营范围', '经营学围', '店铺名称']
         targets_aliexpress = ['卖家', '卖 家', '企业名称', '注册号', '注则号', '所在地', '地址', '网址', '法定代表人', '注册资本', '有效期', '经营范围', '经营学围', '店铺名称']
         targets_test = ['企业注册号', '注册号', '企业名称', '公司名称', '类 型', '类 ”型', '类 。 型', '类型', '地址', '住所', '住 所', '住 ”所']
 
-        if extracted_data_per_image['PLATFORM'] == 'TMALL':
-            # Perform OCR on the entire uploaded image (IT language)
-            image = np.array(bytearray(uploaded_image.read()), dtype=np.uint8)
-            image = cv2.imdecode(image, cv2.IMREAD_COLOR)
-            
-            #test - COLOR IMAGE
-            ocr_text = pytesseract.image_to_string(image, lang='chi_sim', config='--psm 6')
-            st.write('color image ocr text')
-            st.write(ocr_text)
-            # Split the text into lines
-            lines = ocr_text.splitlines()
-            st.write(lines)
-            data = {}
-            current_key = None
-
-            for line in lines:
-                # Split based on a colon (":") or semicolon (";")
-                parts = re.split(r'[:;]', line, 1)
-                if len(parts) == 2:
-                    key, value = parts[0].strip(), parts[1].strip()
-                    data[key] = value
-                    current_key = key
-                else:
-                    # If no colon or semicolon found, append to the previous key if available
-                    if current_key is not None:
-                        data[current_key] += ' ' + line.strip()          
-            # Assign the 'PLATFORM' and 'FILENAME' values in the extracted_data_per_image dictionary
-            updated_data = {}
-            for key, value in data.items():
-                if '企业注册号' in key:
-                    key = '企业注册号'
-                updated_data[key] = value
-
-            # Replace the original data dictionary with the updated one
-            data = updated_data
-
-            extracted_data_per_image_tmall = pd.DataFrame([data])
-            extracted_data_per_image_tmall['PLATFORM'] = 'TMALL'
-            extracted_data_per_image_tmall['FILENAME'] = uploaded_image.name
-            extracted_data_per_image_tmall['FULL_TEXT'] = ocr_text
-            st.write(extracted_data_per_image_tmall)
-            st.write(data)
-            df_extraction_tmall = pd.concat([df_extraction_tmall, extracted_data_per_image_tmall], ignore_index=True)
-
-            targets = targets_tmall
-            
-        if extracted_data_per_image['PLATFORM'] == 'TAOBAO':
-            # Specify the page segmentation mode (PSM) as 6 for LTR and TTB reading
-            ocr_text = pytesseract.image_to_string(image, lang='chi_sim', config='--psm 6')
-            # List of target texts
-            targets = targets_taobao
-        if extracted_data_per_image['PLATFORM'] == 'CHINAALIBABA':
-            # List of target texts
-            targets = targets_chinaalibaba
-        if extracted_data_per_image['PLATFORM'] == 'JD COM':
-            # List of target texts
-            targets = targets_jd
+        
         if extracted_data_per_image['PLATFORM'] == 'ALIEXPRESS':
             # Perform OCR on the entire uploaded image (IT language)
             image = np.array(bytearray(uploaded_image.read()), dtype=np.uint8)
@@ -240,9 +180,42 @@ if uploaded_images:
 
         if extracted_data_per_image['PLATFORM'] == 'TEST' or None:
             targets = targets_test
+            # Perform OCR on the entire uploaded image (IT language)
+            image = np.array(bytearray(uploaded_image.read()), dtype=np.uint8)
+            image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+            
+            #test - COLOR IMAGE
+            ocr_text = pytesseract.image_to_string(image, lang='ita', config='--psm 6')
+            st.write('color image ocr text')
+            st.write(ocr_text)
+            # Split the text into lines
+            lines = ocr_text.splitlines()
+            st.write(lines)
+            data = {}
+            current_key = None
 
+            for line in lines:
+                # Split based on a colon (":")
+                parts = line.split(':', 1)
+                if len(parts) == 2:
+                    key, value = parts[0].strip(), parts[1].strip()
+                    data[key] = value
+                    current_key = key
+                else:
+                    # If no colon found, append to the previous key if available
+                    if current_key is not None:
+                        data[current_key] += ' ' + line.strip()            
+            # Assign the 'PLATFORM' and 'FILENAME' values in the extracted_data_per_image dictionary
+            extracted_data_per_image_test = pd.DataFrame([data])
+            extracted_data_per_image_test['PLATFORM'] = 'TEST'
+            extracted_data_per_image_test['FILENAME'] = uploaded_image.name
+            st.write(extracted_data_per_image_test)
+            st.write(data)
+            df_extraction_test = pd.concat([df_extraction_test, extracted_data_per_image_test], ignore_index=True)
+
+            
         # Display the entire extracted text
-        st.subheader("Entire Extracted Text in Chinese")
+        st.subheader("Entire Extracted Text")
         st.write(ocr_text)
 
         for word in targets:
