@@ -675,20 +675,40 @@ if uploaded_images:
     if aliexpress_df.empty:
         pass
     else:
-        try:
-            aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['Nome della società']
-        except KeyError:
-            aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['Company Name']
+        # try:
+            # aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['Nome della società']
+        # except KeyError:
+            # aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['Company name']
+        
+        
+        # Define a list of columns that may contain the company name
+        name_columns = ['Nome della società', 'Company name']
+        # Iterate through the rows and fill 'SELLER_BUSINESS_NAME_CN' with the first non-empty value from available columns
+        for index, row in aliexpress_df.iterrows():
+            for column in name_columns:
+                if column in row and not pd.isna(row[column]) and row[column] != '':
+                    aliexpress_df.at[index, 'SELLER_BUSINESS_NAME'] = row[column]
+                    break
 
+        
         # Remove leading and trailing spaces
         aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['SELLER_BUSINESS_NAME'].str.strip()
 
         aliexpress_df['COMPANY_TYPE'] = '-'
 
-        try:
-            aliexpress_df['SELLER_VAT_N'] = aliexpress_df['Partita.IVA']
-        except KeyError:
-            aliexpress_df['SELLER_VAT_N'] = aliexpress_df['Partita IVA']
+
+        # Define a list of columns that may contain the company name
+        name_columns = ['Partita IVA', 'VAT number']
+        for index, row in aliexpress_df.iterrows():
+            for column in name_columns:
+                if column in row and not pd.isna(row[column]) and row[column] != '':
+                    aliexpress_df.at[index, 'SELLER_VAT_N'] = row[column]
+                    break
+
+        # try:
+        #     aliexpress_df['SELLER_VAT_N'] = aliexpress_df['Partita.IVA']
+        # except KeyError:
+        #     aliexpress_df['SELLER_VAT_N'] = aliexpress_df['Partita IVA']
         # Remove 'Numero di' and the text before it if it's present
         aliexpress_df['SELLER_VAT_N'] = aliexpress_df['SELLER_VAT_N'].str.replace(r'Numero di.*$', '', regex=True)
         # aliexpress_df['SELLER_VAT_N'] = aliexpress_df['SELLER_VAT_N'].str.replace(r'registrazione.*$', '', regex=True)
