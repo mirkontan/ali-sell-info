@@ -101,6 +101,8 @@ country_city_dict = {
         ('Dongxiang', 'Jiangxi', 'Mainland China'),
         ('Guigang', 'Guangxi', 'Mainland China'),
         ('Zhengzhou', 'Henan', 'Mainland China'),
+        ('Zhangzhou', 'Fujian', 'Mainland China'), 
+        ('Songyuan', 'Jilin', 'Mainland China'),
         ('Albacete', 'Albacete', 'Spain')
 }
 
