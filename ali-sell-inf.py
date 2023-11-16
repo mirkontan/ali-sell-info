@@ -1401,7 +1401,10 @@ if uploaded_images:
         path_separator = '/'
     
     # Define the path to save the Excel file
-    download_path = os.path.join(home_directory, "Downloads", filename)
+    download_directory = os.path.join(home_directory, "Downloads")
+    os.makedirs(download_directory, exist_ok=True)  # Create the directory if it doesn't exist
+    
+    download_path = os.path.join(download_directory, filename)
     
     # Export the DataFrame to Excel
     output_df.to_excel(download_path, index=False)
@@ -1410,7 +1413,6 @@ if uploaded_images:
     # Provide the download link
     st.markdown(f"Download the SQL Template file: [SellersInfo_{timestamp}.xlsx]({download_path})")
     st.dataframe(output_df)
-
 
 
 
