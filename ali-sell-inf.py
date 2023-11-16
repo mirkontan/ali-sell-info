@@ -142,6 +142,7 @@ if uploaded_images:
             df_extraction = pd.DataFrame.from_dict([extracted_data_per_image], orient='columns')
 
             # extracted_data_per_image_aliexpress_ = {**extracted_data_per_image, **extracted_data_per_image_aliexpress}
+            st.write(df_extraction_aliexpress)
             df_extraction_aliexpress = pd.concat([df_extraction_aliexpress, extracted_data_per_image_aliexpress], ignore_index=True)
             df_extraction_aliexpress = pd.concat([df_extraction, df_extraction_aliexpress], axis=1)
             
