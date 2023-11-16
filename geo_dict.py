@@ -103,6 +103,16 @@ country_city_dict = {
         ('Zhengzhou', 'Henan', 'Mainland China'),
         ('Zhangzhou', 'Fujian', 'Mainland China'), 
         ('Songyuan', 'Jilin', 'Mainland China'),
+        ('Haikou', 'Hainan', 'Mainland China'),
+        ('Dezhou', 'Shandong', 'Mainland China'),
+        ('Wuhan', 'Hubei', 'Mainland China'),
+        ('Putian', 'Fujian', 'Mainland China'),
+        ('Yangzhou', 'Jiangsu', 'Mainland China'),
+        ('Yueyang', 'Hunan', 'Mainland China'),
+        ('Wuhan', 'Hubei', 'Mainland China'),
+        ('Foggia', 'Puglia', 'Italy'),
+        ('Albolote', 'Granada', 'Spain'),
+        ('Santander', 'Cantabria', 'Spain'),
         ('Albacete', 'Albacete', 'Spain')
 }
 
