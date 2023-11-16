@@ -1385,10 +1385,12 @@ if uploaded_images:
     # Provide the download link
     ## st.markdown(f"Download the SQL Template file: [SellersInfo_{timestamp}.xlsx]({download_path})")
     ## st.dataframe(output_df)
-    
+
+
 
     # Determine the user's home directory and the appropriate path separator
-    if platform.system() == 'Windows':
+    current_platform = platform.system()
+    if current_platform == 'Windows':
         # Windows OS
         home_directory = os.path.expanduser("~")
         path_separator = '\\'
@@ -1407,7 +1409,10 @@ if uploaded_images:
     # Provide the download link
     st.markdown(f"Download the SQL Template file: [SellersInfo_{timestamp}.xlsx]({download_path})")
     st.dataframe(output_df)
- 
+
+
+
+
     # # Generate a timestamp for the filename
     # timestamp = generate_timestamp()
     # filename = f"SellersInfo_{timestamp}.xlsx"
