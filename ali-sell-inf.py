@@ -414,7 +414,7 @@ if uploaded_images:
 
         
         # Create a DataFrame for the extracted data of this image
-        df_extraction_image = pd.DataFrame(extracted_data_per_image)
+        df_extraction_image = pd.DataFrame([extracted_data_per_image])
         
         # st.write( 'df_extraction_image')
         # st.write(df_extraction_image)
