@@ -1377,15 +1377,36 @@ if uploaded_images:
     filename = f"SellersInfo_SQL{timestamp}.xlsx"
     
     # Define the path to save the Excel file
-    download_path = os.path.join("/Users/mirkofontana/Downloads", filename)
+    ## download_path = os.path.join("/Users/mirkofontana/Downloads", filename)
 
+    # Export the DataFrame to Excel
+    ## output_df.to_excel(download_path, index=False)
+    ## st.header('Extracted Seller Information - SQL Template')
+    # Provide the download link
+    ## st.markdown(f"Download the SQL Template file: [SellersInfo_{timestamp}.xlsx]({download_path})")
+    ## st.dataframe(output_df)
+    
+
+    # Determine the user's home directory and the appropriate path separator
+    if platform.system() == 'Windows':
+        # Windows OS
+        home_directory = os.path.expanduser("~")
+        path_separator = '\\'
+    else:
+        # Linux or MacOS
+        home_directory = os.path.expanduser("~")
+        path_separator = '/'
+    
+    # Define the path to save the Excel file
+    download_path = os.path.join(home_directory, "Downloads", filename)
+    
     # Export the DataFrame to Excel
     output_df.to_excel(download_path, index=False)
     st.header('Extracted Seller Information - SQL Template')
+    
     # Provide the download link
     st.markdown(f"Download the SQL Template file: [SellersInfo_{timestamp}.xlsx]({download_path})")
     st.dataframe(output_df)
-
  
     # # Generate a timestamp for the filename
     # timestamp = generate_timestamp()
