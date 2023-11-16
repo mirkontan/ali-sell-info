@@ -1232,7 +1232,8 @@ if uploaded_images:
         ('Zhoukou', 'Henan', 'Mainland China'),
         ('Nanping', 'Fujian', 'Mainland China'),
         ('Jizhou', 'Henan', 'Mainland China'),
-        ('Dongxiang', 'Jiangxi', 'Mainland China')
+        ('Dongxiang', 'Jiangxi', 'Mainland China'),
+        ('Guigang', 'Guangxi', 'Mainland China')
     }
 
     country_area_dict = {
