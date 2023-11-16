@@ -684,12 +684,15 @@ if uploaded_images:
         # Define a list of columns that may contain the company name
         name_columns = ['Nome della società', 'Company name']
         # Iterate through the rows and fill 'SELLER_BUSINESS_NAME_CN' with the first non-empty value from available columns
-        for index, row in aliexpress_df.iterrows():
-            for column in name_columns:
-                if column in row and not pd.isna(row[column]) and row[column] != '':
-                    aliexpress_df.at[index, 'SELLER_BUSINESS_NAME'] = row[column]
-                    break
-
+        try:
+            for index, row in aliexpress_df.iterrows():
+                for column in name_columns:
+                    if column in row and not pd.isna(row[column]) and row[column] != '':
+                        aliexpress_df.at[index, 'SELLER_BUSINESS_NAME'] = row[column]
+                        break
+        except KeyError:
+            aliexpress_df['SELLER_BUSINESS_NAME'] = '-'
+            
         
         # Remove leading and trailing spaces
         aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['SELLER_BUSINESS_NAME'].str.strip()
@@ -720,7 +723,7 @@ if uploaded_images:
         for index, row in aliexpress_df.iterrows():
             for column in name_columns:
                 if column in row and not pd.isna(row[column]) and row[column] != '':
-                    aliexpress_df.at[index, 'SELLER_VAT_N'] = row[column]
+                    aliexpress_df.at[index, 'ESTABLISHED_IN'] = row[column]
                     break
         # try:
         #     aliexpress_df['ESTABLISHED_IN'] = aliexpress_df['Stabilito']
