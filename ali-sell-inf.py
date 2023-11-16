@@ -720,11 +720,15 @@ if uploaded_images:
 
         # Define a list of columns that may contain the company name
         name_columns = ['Stabilito', 'Established']
-        for index, row in aliexpress_df.iterrows():
-            for column in name_columns:
-                if column in row and not pd.isna(row[column]) and row[column] != '':
-                    aliexpress_df.at[index, 'ESTABLISHED_IN'] = row[column]
-                    break
+        try:
+            for index, row in aliexpress_df.iterrows():
+                for column in name_columns:
+                    if column in row and not pd.isna(row[column]) and row[column] != '':
+                        aliexpress_df.at[index, 'ESTABLISHED_IN'] = row[column]
+                        break
+        except KeyError:
+            aliexpress_df['ESTABLISHED_IN'] = '-'
+
         # try:
         #     aliexpress_df['ESTABLISHED_IN'] = aliexpress_df['Stabilito']
         # except KeyError:
