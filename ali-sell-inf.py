@@ -1038,8 +1038,6 @@ if uploaded_images:
     fill_empty_with_translation(sellers_info_df, 'SELLER_ADDRESS', 'SELLER_ADDRESS_CN')
     fill_empty_with_translation(sellers_info_df, 'COMPANY_TYPE', 'COMPANY_TYPE_CN')
 
-    from pypinyin import pinyin, Style, lazy_pinyin
-
     def format_personal_names(df, target_column, source_column):
         for index, row in df.iterrows():
             if pd.isna(row[target_column]) and not pd.isna(row[source_column]):
