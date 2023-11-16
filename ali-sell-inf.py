@@ -372,14 +372,8 @@ if uploaded_images:
                     # If no colon or semicolon found, append to the previous key if available
                     if current_key is not None:
                         data[current_key] += ' ' + line.strip()          
-            # Assign the 'PLATFORM' and 'FILENAME' values in the extracted_data_per_image dictionary
-            # updated_data = {}
-            # for key, value in data.items():
-            #     if '企业注册号' in key:
-            #         key = '企业注册号'
-            #     updated_data[key] = value
-            # Replace the original data dictionary with the updated one
-            # data = updated_data
+
+            
             extracted_data_per_image_jd = pd.DataFrame([data])
             extracted_data_per_image_jd['PLATFORM'] = 'JD COM'
             extracted_data_per_image_jd['FILENAME'] = uploaded_image.name
@@ -483,15 +477,6 @@ if uploaded_images:
     df_extraction_overall = pd.concat([df_extraction_overall, df_extraction_jd], ignore_index=True)
     df_extraction_overall = pd.concat([df_extraction_overall, df_extraction_taobao], ignore_index=True)
     df_extraction_overall = pd.concat([df_extraction_overall, df_extraction_chinaalibaba], ignore_index=True)
-   # st.header('df extraXTION')
-    # st.write(df_extraction)
-    # st.header('df extraXTION ALIEXPRESS')
-    # st.write(df_extraction_aliexpress)
-    # st.header('df extraXTION TMALL')
-    # st.write(df_extraction_tmall)
-
-    # st.header('df extraXTION OVERALL')
-    # st.write(df_extraction_overall)
 
     # Copy the DataFrame
     df_sellers_info = df_extraction_overall.copy()
@@ -614,9 +599,6 @@ if uploaded_images:
                     taobao_df.at[index, 'EXPIRATION_DATE'] = row[column]
                     break  # Stop looking for the address once found
 
-        # taobao_df['EXPIRATION_DATE'] = taobao_df["经营期限至'"]
-        # taobao_df['EXPIRATION_DATE'] = taobao_df['EXPIRATION_DATE'].str.replace(r'\s', '', regex=True)    
-
         taobao_df['REGISTRATION_INSTITUTION'] = taobao_df['登记机关']
         # taobao_df['REGISTRATION_INSTITUTION'] = taobao_df['REGISTRATION_INSTITUTION'].str.replace(r'\s', '', regex=True)        
         # st.dataframe(taobao_df)
@@ -629,80 +611,20 @@ if uploaded_images:
             for target in targets_chinaalibaba:
                 chinaalibaba_df[target] = None  # Add new columns with None values
     else:
-        # # Check for missing values and replace them with an empty string
-        
-        # chinaalibaba_df['统一社会'].fillna('', inplace=True)
-        # chinaalibaba_df['SELLER_VAT_N'] = chinaalibaba_df['FULL_TEXT'].str.split('注册号').str[1]
-        # chinaalibaba_df['SELLER_VAT_N'] = chinaalibaba_df['SELLER_VAT_N'].str.split('企业').str[0]
-        # chinaalibaba_df['SELLER_VAT_N'] = chinaalibaba_df['SELLER_VAT_N'].str.split('登记').str[0]
-        # chinaalibaba_df['SELLER_VAT_N'] = chinaalibaba_df['SELLER_VAT_N'].str.replace(r'\s', '', regex=True)
-        # chinaalibaba_df['SELLER_VAT_N'] = chinaalibaba_df['SELLER_VAT_N'].astype(str)
-        # chinaalibaba_df['SELLER_VAT_N'] = chinaalibaba_df['SELLER_VAT_N'].str.split('企业').str[0]
-       
-        # chinaalibaba_df['SELLER_BUSINESS_NAME_CN'] = chinaalibaba_df['公司名称'].str.split('注').str[0]
         chinaalibaba_df['SELLER_BUSINESS_NAME_CN'] = chinaalibaba_df['公司名称']
-        # chinaalibaba_df['SELLER_BUSINESS_NAME_CN'] = chinaalibaba_df['SELLER_BUSINESS_NAME_CN'].str.strip()
-        # chinaalibaba_df['SELLER_BUSINESS_NAME_CN'] = chinaalibaba_df['SELLER_BUSINESS_NAME_CN'].str.split('认证').str[1]
         chinaalibaba_df['SELLER_ADDRESS_CN'] = chinaalibaba_df['注册地址']
         chinaalibaba_df['SELLER_VAT_N'] = chinaalibaba_df['统一社会']
 
-        # # Define the previous regular expression pattern to match the desired element
-        # pattern = r'\b[A-Z0-9]{16,18}\b'       
-        # # Iterate through the rows and update the SELLER_VAT_N column
-        # for index, row in chinaalibaba_df.iterrows():
-        #     text = row['FULL_TEXT']
-        #     match = re.search(pattern, text)
-        #     if match:
-        #         element = match.group(0)
-        #         chinaalibaba_df.at[index, 'SELLER_VAT_N'] = element
-
-        # chinaalibaba_df['SELLER_BUSINESS_NAME_CN'] = chinaalibaba_df['SELLER_BUSINESS_NAME_CN'].str.split(' ').str[0]
-        # # 主体资质 ”该信息于2023年06月04日通过联信专业认证  深圳市道勤酒店用品有限公司                          中国广东深圳龙岗区南湾街道布澜路21号 联创科技园25号厂房3楼301-1  5000万元 2009-07-28  91440300692529553R 芭国龙  91440300692529553R                            有限责任公司  深圳市市场监督管理局                             2023  2009-07-27 至 至今 
         chinaalibaba_df['COMPANY_TYPE_CN'] = chinaalibaba_df['企业类型']
-        # chinaalibaba_df['COMPANY_TYPE_CN'] = chinaalibaba_df['COMPANY_TYPE_CN'].str.split('登记').str[0]
-        # chinaalibaba_df['COMPANY_TYPE_CN'] = chinaalibaba_df['COMPANY_TYPE_CN'].str.split('上册').str[0]
-        # chinaalibaba_df['COMPANY_TYPE_CN'] = chinaalibaba_df['COMPANY_TYPE_CN'].str.replace(r'主', '', regex=True)
-        # chinaalibaba_df['COMPANY_TYPE_CN'] = chinaalibaba_df['COMPANY_TYPE_CN'].str.replace(r'串', '', regex=True)
-        # chinaalibaba_df['COMPANY_TYPE_CN'] = chinaalibaba_df['COMPANY_TYPE_CN'].str.replace(r'估', '', regex=True)
-        # chinaalibaba_df['COMPANY_TYPE_CN'] = chinaalibaba_df['COMPANY_TYPE_CN'].str.replace(r'型', '', regex=True)
-        # chinaalibaba_df['COMPANY_TYPE_CN'] = chinaalibaba_df['COMPANY_TYPE_CN'].str.replace(r'\s', '', regex=True)
-
-        # chinaalibaba_df['SELLER_ADDRESS_CN'] = chinaalibaba_df['地址'].str.split('成立').str[0]
-        # chinaalibaba_df['SELLER_ADDRESS_CN'] = chinaalibaba_df['SELLER_ADDRESS_CN'].str.split('|').str[0]
-        # chinaalibaba_df['SELLER_ADDRESS_CN'] = chinaalibaba_df['SELLER_ADDRESS_CN'].str.split('注册').str[0]
-        # chinaalibaba_df['SELLER_ADDRESS_CN'] = chinaalibaba_df['SELLER_ADDRESS_CN'].str.replace(r'\s', '', regex=True)
-        # chinaalibaba_df['SELLER_ADDRESS_CN'] = chinaalibaba_df['SELLER_ADDRESS_CN'].str.upper()
 
         chinaalibaba_df['LEGAL_REPRESENTATIVE_CN'] = chinaalibaba_df['法定代表人']        
-        # chinaalibaba_df['LEGAL_REPRESENTATIVE_CN'] = chinaalibaba_df['LEGAL_REPRESENTATIVE_CN'].str.split('表人').str[1]
-        # chinaalibaba_df['LEGAL_REPRESENTATIVE_CN'] = chinaalibaba_df['LEGAL_REPRESENTATIVE_CN'].str.split('注册').str[0]
-        # chinaalibaba_df['LEGAL_REPRESENTATIVE_CN'] = chinaalibaba_df['LEGAL_REPRESENTATIVE_CN'].str.replace(r'\s', '', regex=True)
-
         chinaalibaba_df['BUSINESS_DESCRIPTION'] = chinaalibaba_df['经营范围']
         chinaalibaba_df['ESTABLISHED_IN'] = chinaalibaba_df['营业期限']
 
-        # chinaalibaba_df['ESTABLISHED_IN'] = chinaalibaba_df['注册资本'].str.split('成立日期').str[1]
-        
-        # # Define a regular expression pattern to match the "4 digits - 2 digits - 2 digits" pattern
-        # date_pattern = r'(\d{4}-\d{2}-\d{2})'
-        # # Iterate through the rows and update the ESTABLISHED IN column
-        # for index, row in chinaalibaba_df.iterrows():
-        #     text = row['FULL_TEXT']
-        #     match = re.search(date_pattern, text)
-        #     if match:
-        #         date_string = match.group(1)  # Extract the first matching date
-        #         chinaalibaba_df.at[index, 'ESTABLISHED_IN'] = date_string
-
         chinaalibaba_df['INITIAL_CAPITAL'] = chinaalibaba_df['注册资本']
-        # chinaalibaba_df['INITIAL_CAPITAL'] = chinaalibaba_df['INITIAL_CAPITAL'].str.split('|').str[0]
-
-        # chinaalibaba_df['EXPIRATION_DATE'] = chinaalibaba_df['营业期限'].str.split('经').str[0]
-        # chinaalibaba_df['EXPIRATION_DATE'] = chinaalibaba_df['EXPIRATION_DATE'].str.split('|').str[0]
         chinaalibaba_df['EXPIRATION_DATE'] = chinaalibaba_df['营业期限'].str.replace(r'^.*至今', 'Active', regex=True)
 
         chinaalibaba_df['REGISTRATION_INSTITUTION'] = chinaalibaba_df['登记机关']
-        # chinaalibaba_df['REGISTRATION_INSTITUTION'] = chinaalibaba_df['REGISTRATION_INSTITUTION'].str.split('|').str[0]
-        # st.dataframe(chinaalibaba_df)    
   
 # ------------------------------------------------------------
 #                             JD COM
@@ -717,13 +639,8 @@ if uploaded_images:
 
         # # Check for missing values and replace them with an empty string
         jd_df['SELLER_VAT_N'] = jd_df['营业执照注册号'] 
-        # jd_df['SELLER_VAT_N'] = jd_df['SELLER_VAT_N'].str.split('丢定代').str[0]
-        # jd_df['SELLER_VAT_N'] = jd_df['SELLER_VAT_N'].str.replace(r'法证代', '法定代', regex=True)
-        # jd_df['SELLER_VAT_N'] = jd_df['SELLER_VAT_N'].str.split('法定代').str[0]
-        # jd_df['SELLER_VAT_N'] = jd_df['SELLER_VAT_N'].str.replace(r'\。', '', regex=True)
-        # jd_df['SELLER_VAT_N'] = jd_df['SELLER_VAT_N'].str.split(r'|').str[0]
 
-            # Remove all white spaces in the '企业注册号' column
+        # Remove all white spaces in the '企业注册号' column
         jd_df['SELLER_VAT_N'] = jd_df['SELLER_VAT_N'].astype(str)
         # jd_df['SELLER_VAT_N'] = jd_df['SELLER_VAT_N'].str.replace(r'\s', '', regex=True)
         jd_df['SELLER_VAT_N'] = jd_df['SELLER_VAT_N'].str.replace(r'，', '', regex=False)
@@ -738,13 +655,8 @@ if uploaded_images:
                     jd_df.at[index, 'SELLER_BUSINESS_NAME_CN'] = row[column]
                     break  # Stop looking for the address once found
         
-        # if '企业和名称' in jd_df.columns:
-        #     jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['企业名称'].fillna(jd_df['企业和名称'])
-        # else: 
-        #     jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['企业名称']
 
         jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.lstrip()
-        # jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.split(r'\:').str[1]
         jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.replace(r'CO\., LIMITED.*', 'CO., LIMITED', regex=True)
         jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.replace(r'Co\., Limited.*', 'Co., Limited', regex=True)
         jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.replace(r'ED\.AR', 'ED', regex=True)
@@ -754,8 +666,6 @@ if uploaded_images:
         jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.replace(r'ITEDAAEM', 'ITED', regex=False)
         jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.replace('ITEDaA', 'ITED', regex=False)
 
-        # # jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.split(r'Limited').str[0] + 'Limited'
-        # # jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.split(r'Company').str[0] + 'Company'
         jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.split(r'ARMSLIM').str[0]
         jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.split(r'AES').str[0]
         jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.split(r'ARMS').str[0]
@@ -767,45 +677,19 @@ if uploaded_images:
         jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.split(r'AEM').str[0]
         jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.replace(r'CO.*LIMITED', 'CO., LIMITED', regex=True)
 
-        # jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.replace('UMITED', ' LIMITED', regex=False)
-
-        # jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.replace('UMITED', ' LIMITED', regex=False)
-        # jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.replace('co. UMITED', 'CO., LIMITED', regex=False)
-        # jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.replace('CO .LIMITED', 'CO., LIMITED', regex=False)
-        # jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.replace('CO\\.LIMITED', 'CO., LIMITED', regex=True)
-        # jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.replace('UIMITED', ' LIMITED', regex=False)
-        # jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.replace('Intemational', 'International', regex=False)
-        # Check if 'CO., LIMITED' is not found in 'SELLERBUSINESSNAMECN'
-        # mask = ~jd_df['SELLER_BUSINESS_NAME_CN'].str.contains('CO\\., LIMITED', case=False, na=False)
-        # # Replace 'LIMITED' with 'CO., LIMITED' for rows where it's not found
-        # jd_df.loc[mask, 'SELLER_BUSINESS_NAME_CN'] = jd_df.loc[mask, 'SELLER_BUSINESS_NAME_CN'].str.replace('LIMITED', 'CO., LIMITED', regex=False)
-     # jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.split('有限公司').str[0] + '有限公司'
-        # jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.split('综合').str[0]
-        # jd_df['SELLER_BUSINESS_NAME_CN'] = jd_df['SELLER_BUSINESS_NAME_CN'].str.lstrip()
-
         jd_df['SELLER_ADDRESS_CITY'] = jd_df['营业执照所在地']
         jd_df['SELLER_ADDRESS_CITY'] = jd_df['SELLER_ADDRESS_CITY'].str.lstrip()
         jd_df['SELLER_ADDRESS_CITY'] = jd_df['SELLER_ADDRESS_CITY'].str.replace('1', '', regex=False)
-        # jd_df['SELLER_ADDRESS_CITY'] = jd_df['SELLER_ADDRESS_CITY'].str.replace(r'\。', '', regex=True)
        
         jd_df['SELLER_ADDRESS_CN'] = jd_df['联系地址']
         jd_df['SELLER_ADDRESS_CN'] = jd_df['SELLER_ADDRESS_CN'].str.lstrip()
         jd_df['SELLER_ADDRESS_CN'] = jd_df['SELLER_ADDRESS_CN'].str.upper()
         jd_df['SELLER_ADDRESS_CN'] = jd_df['SELLER_ADDRESS_CN'].fillna('-')
-       # jd_df['SELLER_ADDRESS_CN'] = jd_df['SELLER_ADDRESS_CN'].str.replace(r'\s', '', regex=True)
 
         jd_df['LEGAL_REPRESENTATIVE_CN'] = jd_df['法定代表人姓名']
         jd_df['LEGAL_REPRESENTATIVE_CN'] = jd_df['LEGAL_REPRESENTATIVE_CN'].astype(str).str.lstrip()
-        # jd_df['LEGAL_REPRESENTATIVE_CN'] = jd_df['LEGAL_REPRESENTATIVE_CN'].str.slice(0, 3)
-
-        # jd_df['LEGAL_REPRESENTATIVE_CN'] = jd_df['LEGAL_REPRESENTATIVE_CN'].str.replace(r'\s', '', regex=True)
-        # jd_df['LEGAL_REPRESENTATIVE_CN'] = jd_df['LEGAL_REPRESENTATIVE_CN'].str.replace(r'人:', '', regex=False)
-        # jd_df['LEGAL_REPRESENTATIVE_CN'] = jd_df['LEGAL_REPRESENTATIVE_CN'].str.replace(r'人;', '', regex=False)
 
         jd_df['SHOP_NAMEextracted'] = jd_df['店铺名称']
-        # jd_df['SHOP_NAMEextracted'] = jd_df['SHOP_NAMEextracted'].str.replace('店生网址', '店铺网址', regex=False)
-        # jd_df['SHOP_NAMEextracted'] = jd_df['SHOP_NAMEextracted'].str.split('店铺网').str[0]
-        # jd_df['SHOP_NAMEextracted'] = jd_df['SHOP_NAMEextracted'].str.lstrip()
 
         if '店铺网址' in jd_df.columns:
             jd_df['SHOP_URLextracted'] = jd_df['店铺网址']
@@ -852,14 +736,6 @@ if uploaded_images:
         except KeyError:
             aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['Company Name']
 
-        # aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['SELLER_BUSINESS_NAME'].str.replace(r'_.','')
-        # aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['SELLER_BUSINESS_NAME'].str.replace(r"'",'')
-        # aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['SELLER_BUSINESS_NAME'].str.replace(r"‘",'')
-        # aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['SELLER_BUSINESS_NAME'].str.replace(r"Co., Lt",'Co., Ltd')
-        # aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['SELLER_BUSINESS_NAME'].str.replace(r"Co., Lig",'Co., Ltd')
-        # aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['SELLER_BUSINESS_NAME'].str.replace(r"Co Lia",'Co., Ltd')
-        # aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['SELLER_BUSINESS_NAME'].str.replace(r"Co., Lîd",'Co., Ltd')
-        # aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['SELLER_BUSINESS_NAME'].str.replace(r'Co., Ltd.*$', 'Co., Ltd', regex=True)
         # Remove leading and trailing spaces
         aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['SELLER_BUSINESS_NAME'].str.strip()
 
@@ -880,16 +756,10 @@ if uploaded_images:
         except KeyError:
             aliexpress_df['ESTABLISHED_IN'] = aliexpress_df['. Stabilito']
         
-        
         aliexpress_df['ESTABLISHED_IN'] = aliexpress_df['ESTABLISHED_IN'].str.strip()
         aliexpress_df['ESTABLISHED_IN'] = aliexpress_df['ESTABLISHED_IN'].str.replace('Autorità di', '-', regex=False)
         aliexpress_df['REGISTRATION_INSTITUTION'] = aliexpress_df['ESTABLISHED_IN'].str.split(' - ').str[1]
-        aliexpress_df['ESTABLISHED_IN'] = aliexpress_df['ESTABLISHED_IN'].str.split(' - ').str[0]
-
-        # aliexpress_df['ESTABLISHED_IN'] = aliexpress_df['ESTABLISHED_IN'].str.replace(r'..*$', '', regex=True)
-        # aliexpress_df['ESTABLISHED_IN'] = aliexpress_df['ESTABLISHED_IN'].str.replace(r' .*$', '', regex=True)
-        # aliexpress_df['ESTABLISHED_IN'] = aliexpress_df['ESTABLISHED_IN'].str.replace(r'.', '', regex=False)
-     
+        aliexpress_df['ESTABLISHED_IN'] = aliexpress_df['ESTABLISHED_IN'].str.split(' - ').str[0]     
         aliexpress_df['SELLER_ADDRESS'] = aliexpress_df['Indirizzo']
 
         try:
@@ -898,19 +768,9 @@ if uploaded_images:
             aliexpress_df['SELLER_EMAIL'] = aliexpress_df['E-mall']
 
         aliexpress_df['SELLER_EMAIL'] = aliexpress_df['SELLER_EMAIL'].str.strip()
-        aliexpress_df['SELLER_EMAIL'] = aliexpress_df['SELLER_EMAIL'].str.split(' ').str[0]
-
-        # aliexpress_df['SELLER_EMAIL'] = aliexpress_df['SELLER_EMAIL'].str.replace(r'outlook con.*$', 'outlook.com', regex=True)
-        # aliexpress_df['SELLER_EMAIL'] = aliexpress_df['SELLER_EMAIL'].str.replace(r'.com.*$', '.com', regex=True)
-        # aliexpress_df['SELLER_EMAIL'] = aliexpress_df['SELLER_EMAIL'].str.replace(r'0163.*$', '@163.com', regex=True)
-        # aliexpress_df['SELLER_EMAIL'] = aliexpress_df['SELLER_EMAIL'].str.replace(r'@ ', '@', regex=True)
-        # aliexpress_df['SELLER_EMAIL'] = aliexpress_df['SELLER_EMAIL'].str.replace(r' outlook', '@outlook', regex=True)
-        # aliexpress_df['SELLER_EMAIL'] = aliexpress_df['SELLER_EMAIL'].str.replace(r'00g.com', '@qq.com', regex=True)
-  
+        aliexpress_df['SELLER_EMAIL'] = aliexpress_df['SELLER_EMAIL'].str.split(' ').str[0]  
         aliexpress_df['SELLER_TEL_N'] = aliexpress_df['Numero di telefono']
-
         aliexpress_df['LEGAL_REPRESENTATIVE'] = aliexpress_df['Rappresentante legale']
-
         aliexpress_df['INITIAL_CAPITAL'] = '-'
         aliexpress_df['EXPIRATION_DATE'] = '-'
         aliexpress_df['BUSINESS_DESCRIPTION'] = '-'
@@ -979,42 +839,8 @@ if uploaded_images:
 
 
 
-    # Define the additional columns and their initial values
-    # additional_columns = {
-    #     "SELLER_BUSINESS_NAME_CN": '',
-    #     'SELLER_BUSINESS_NAME': '',
-    #     "COMPANY_TYPE_EN": '',
-    #     "SELLER_ADDRESS_CN": '',
-    #     "SELLER_PROVINCE_CN": '',
-    #     "SELLER_CITY_CN": '',
-    #     "LEGAL_REPRESENTATIVE_EN": '',
-    #     'SELLER_ADDRESS': '',
-    #     'SELLER_EMAIL': '',
-    #     'SELLER_TEL_N': ''}
-    # # Add the additional columns to the DataFrame
-    # for column_name, initial_value in additional_columns.items():
-    #     sellers_info_df[column_name] = initial_value
-
-
-
     sellers_info_df['SHOP_NAMEextracted'] = sellers_info_df['SHOP_NAMEextracted'].fillna('-')
     sellers_info_df['SHOP_URLextracted'] = sellers_info_df['SHOP_URLextracted'].fillna('-')
-    # sellers_info_df.drop(['统一社会', '企业注册号', '注册号', '公司名称', '企业名称', '企业类型', '地址', '成立日期', '注册号', '类型', '类 型', '类 ”型', '类 。 型', '地址', '住所', '住 所', '住 ”所', '法定代表人', '经营期限自', '经营范围', '经营学围', '成立时间', '注册资本', '营业期限', '登记机关'], axis=1, inplace=True)
-    # sellers_info_df.drop(['该准时间'], axis=1, inplace=True)
-    # Apply the translation function to the 'SELLER_BUSINESS_NAME_CN' column
-    # sellers_info_df['SELLER_BUSINESS_NAME'] = sellers_info_df['SELLER_BUSINESS_NAME'].astype(str)
-    # # Apply these transformations based on the 'PLATFORM' value
-    # is_aliexpress = sellers_info_df['PLATFORM'] == 'ALIEXPRESS'
-    # Apply transformations for 'ALIEXPRESS' platform
-    # sellers_info_df.loc[is_aliexpress, 'SELLER_BUSINESS_NAME'] = sellers_info_df.loc[is_aliexpress, 'SELLER_BUSINESS_NAME']
-    # Apply transformations for other platforms
-    # sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME_CN'] = sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME_CN'].str.replace(r'贸易批发商行', 'Wholesale Trading Company', regex=True)
-    # sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME_CN'] = sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME_CN'].str.replace(r'商行', 'Trading Company', regex=True)
-    # sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME'] = sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME_CN']
-    # sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME'] = sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME'].str.replace(r'Trade Trading Company', 'Trading Company', regex=True)
-    # sellers_info_df.loc[~is_aliexpress, 'COMPANY_TYPE_EN'] = sellers_info_df.loc[~is_aliexpress, 'COMPANY_TYPE']
-    # sellers_info_df.loc[~is_aliexpress, 'LEGAL_REPRESENTATIVE_EN'] = sellers_info_df.loc[~is_aliexpress, 'LEGAL_REPRESENTATIVE']
-
 
 
     def fill_empty_with_translation(df, target_column, source_column):
@@ -1024,18 +850,6 @@ if uploaded_images:
 
     fill_empty_with_translation(sellers_info_df, 'SELLER_BUSINESS_NAME', 'SELLER_BUSINESS_NAME_CN')
 
-
-    # # Create a Translator instance
-    # translator = Translator()
-
-    # def fill_empty_with_translation(df, target_column, source_column):
-    #     for index, row in df.iterrows():
-    #         if pd.isna(row[target_column]) and not pd.isna(row[source_column]):
-    #             try:
-    #                 translation = translator.translate(row[source_column], src='zh-cn', dest='en')
-    #                 df.at[index, target_column] = translation.text
-    #             except Exception as e:
-    #                 print(f"Translation error: {e}")
 
     # fill_empty_with_translation(sellers_info_df, 'SELLER_BUSINESS_NAME', 'SELLER_BUSINESS_NAME_CN')
     fill_empty_with_translation(sellers_info_df, 'SELLER_ADDRESS', 'SELLER_ADDRESS_CN')
@@ -1075,39 +889,6 @@ if uploaded_images:
     # Sample Chinese addresses
     addresses = sellers_info_df['SELLER_ADDRESS_CN']
 
-
-    # # Function to extract city from an address using Jieba
-    # def extract_city(address):
-    #     if isinstance(address, str):  # Check if it's a string
-    #         words = list(jieba.cut(address, cut_all=False))  # Segment the address into words
-    #         for word in words:
-    #             if word.endswith('市'):
-    #                 return word
-    #             elif word.endswith('州'):   
-    #                 return word + '市'
-    #             elif word.endswith('圳'):
-    #                 return word + '市'
-    #     return "City not found" # Return a default value if the city is not in the address
-    # # Process each address
-    # # Create an empty 'SELLER_CITY' column
-    # sellers_info_df['SELLER_CITY_CN'] = ""
-
-    # # Process each address and assign the extracted city to the 'SELLER_CITY' column
-    # for index, address in enumerate(addresses):
-    #     city = extract_city(address)
-    #     sellers_info_df.at[index, 'SELLER_CITY_CN'] = city
-    
-
-
-
-    # # Function to extract province from the city
-    # def extract_province(city):
-    #     if city in city_to_province:
-    #         return city_to_province[city]
-    #     return "Province not found"  # Default value if the city is not in the mapping
-
-    # # Apply the extract_province function to the 'SELLER_CITY' column
-    # sellers_info_df['SELLER_PROVINCE_CN'] = sellers_info_df['SELLER_CITY_CN'].apply(extract_province)
 
     # Function to extract city and province from an address using Jieba and the city_to_province dictionary
     def extract_city_and_province(address):
@@ -1182,17 +963,6 @@ if uploaded_images:
     sellers_info_df['SELLER_ADDRESS'] = sellers_info_df['SELLER_ADDRESS'].str.replace('Znen', 'Zhen',regex=False)
     # Apply the extraction function to each row
     sellers_info_df['SELLER_CITY'], sellers_info_df['SELLER_PROVINCE'], sellers_info_df['SELLER_COUNTRY'] = zip(*sellers_info_df['SELLER_ADDRESS'].apply(extract_city_and_country))
-    # Update 'SELLER_PROVINCE' if 'Province Not Found' and 'SELLER_PROVINCE_' is not None
-    # sellers_info_df.loc[(sellers_info_df['SELLER_PROVINCE'] == 'Province Not Found') & (sellers_info_df['SELLER_PROVINCE'].notna()), 'SELLER_PROVINCE'] = sellers_info_df['SELLER_PROVINCE_']
-
-    # Update 'SELLER_CITY' if 'City Not Found' and 'SELLER_CITY_' is not None
-    # sellers_info_df['SELLER_PROVINCE'] = sellers_info_df['SELLER_PROVINCE'].str.replace(' Province', '', regex=False)
-    # sellers_info_df['SELLER_PROVINCE'] = sellers_info_df['SELLER_PROVINCE'].fillna(sellers_info_df['SELLER_PROVINCE_'])
-    # sellers_info_df['SELLER_PROVINCE_'] = sellers_info_df['SELLER_PROVINCE_'].fillna(sellers_info_df['SELLER_PROVINCE'])
-    # sellers_info_df['SELLER_CITY'] = sellers_info_df['SELLER_CITY'].fillna(sellers_info_df['SELLER_CITY_'])
-    # sellers_info_df['SELLER_CITY_'] = sellers_info_df['SELLER_CITY_'].fillna(sellers_info_df['SELLER_CITY'])
-    # Apply the extraction function to each row
-    # sellers_info_df['SELLER_CITY_'], sellers_info_df['SELLER_PROVINCE_'], sellers_info_df['SELLER_COUNTRY'] = zip(*sellers_info_df['SELLER_CITY'].apply(extract_city_and_country))
     mainland_china_rows = sellers_info_df[sellers_info_df['SELLER_COUNTRY'] == 'Mainland China']
 
     # Define a function to generate the URL based on 'SELLER_COUNTRY'
@@ -1319,18 +1089,6 @@ if uploaded_images:
     # Generate a timestamp for the filename
     timestamp = generate_timestamp()
     filename = f"SellersInfo_SQL{timestamp}.xlsx"
-    
-    # Define the path to save the Excel file
-    ## download_path = os.path.join("/Users/mirkofontana/Downloads", filename)
-
-    # Export the DataFrame to Excel
-    ## output_df.to_excel(download_path, index=False)
-    ## st.header('Extracted Seller Information - SQL Template')
-    # Provide the download link
-    ## st.markdown(f"Download the SQL Template file: [SellersInfo_{timestamp}.xlsx]({download_path})")
-    ## st.dataframe(output_df)
-
-
 
     # Determine the user's home directory and the appropriate path separator
     current_platform = sys_platform.system()
@@ -1357,19 +1115,6 @@ if uploaded_images:
     st.markdown(f"Download the SQL Template file: [SellersInfo_{timestamp}.xlsx]({download_path})")
     st.dataframe(output_df)
 
-
-
-    # # Generate a timestamp for the filename
-    # timestamp = generate_timestamp()
-    # filename = f"SellersInfo_{timestamp}.xlsx"
-    
-    # # Define the path to save the Excel file
-    # download_path = os.path.join("/Users/mirkofontana/Downloads", filename)
-
-    # # Export the DataFrame to Excel
-    # sellers_info_df.to_excel(download_path, index=False)
-    # st.header('Extracted Seller Information')
-    # # Provide the download link
     st.markdown(f"Download the Excel file: [SellersInfo_{timestamp}.xlsx]({download_path})")
     st.dataframe(sellers_info_df)
 
