@@ -1013,14 +1013,6 @@ if uploaded_images:
     # sellers_info_df.loc[~is_aliexpress, 'LEGAL_REPRESENTATIVE_EN'] = sellers_info_df.loc[~is_aliexpress, 'LEGAL_REPRESENTATIVE']
 
 
-    translator = Translator()
-
-    # Define a function to check if a string contains Chinese simplified characters
-    def contains_chinese(text):
-        for char in text:
-            if '\u4e00' <= char <= '\u9fff':
-                return True
-        return False
 
     def fill_empty_with_translation(df, target_column, source_column):
         for index, row in df.iterrows():
