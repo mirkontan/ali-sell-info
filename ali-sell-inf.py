@@ -1239,7 +1239,7 @@ if uploaded_images:
     # Apply the extraction function to each row
     sellers_info_df['SELLER_CITY'], sellers_info_df['SELLER_PROVINCE'], sellers_info_df['SELLER_COUNTRY'] = zip(*sellers_info_df['SELLER_ADDRESS'].apply(extract_city_and_country))
     # Update 'SELLER_PROVINCE' if 'Province Not Found' and 'SELLER_PROVINCE_' is not None
-    sellers_info_df.loc[(sellers_info_df['SELLER_PROVINCE'] == 'Province Not Found') & (sellers_info_df['SELLER_PROVINCE_'].notna()), 'SELLER_PROVINCE'] = sellers_info_df['SELLER_PROVINCE_']
+    # sellers_info_df.loc[(sellers_info_df['SELLER_PROVINCE'] == 'Province Not Found') & (sellers_info_df['SELLER_PROVINCE'].notna()), 'SELLER_PROVINCE'] = sellers_info_df['SELLER_PROVINCE_']
 
     # Update 'SELLER_CITY' if 'City Not Found' and 'SELLER_CITY_' is not None
     # sellers_info_df['SELLER_PROVINCE'] = sellers_info_df['SELLER_PROVINCE'].str.replace(' Province', '', regex=False)
