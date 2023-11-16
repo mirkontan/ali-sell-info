@@ -103,7 +103,13 @@ if uploaded_images:
         targets_aliexpress = ['卖家', '卖 家', '企业名称', '注册号', '注则号', '所在地', '地址', '网址', '法定代表人', '注册资本', '有效期', '经营范围', '经营学围', '店铺名称']
         targets_test = ['企业注册号', '注册号', '企业名称', '公司名称', '类 型', '类 ”型', '类 。 型', '类型', '地址', '住所', '住 所', '住 ”所']
 
+        # Check for duplicate indices
+        duplicate_indices = df_sellers_info.index[df_sellers_info.index.duplicated()]
+        print(f'Duplicate indices: {duplicate_indices}')
         
+        # If there are duplicate indices, you can reset the index
+        df_sellers_info.reset_index(drop=True, inplace=True)
+
         if extracted_data_per_image['PLATFORM'] == 'ALIEXPRESS':
             # Perform OCR on the entire uploaded image (IT language)
             image = np.array(bytearray(uploaded_image.read()), dtype=np.uint8)
