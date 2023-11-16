@@ -1237,17 +1237,15 @@ if uploaded_images:
             sellers_info_df.at[index, 'SELLER_COUNTRY'] = 'Mainland China'
     sellers_info_df['SELLER_ADDRESS'] = sellers_info_df['SELLER_ADDRESS'].str.replace('Znen', 'Zhen',regex=False)
     # Apply the extraction function to each row
-    sellers_info_df['SELLER_CITY_'], sellers_info_df['SELLER_PROVINCE_'], sellers_info_df['SELLER_COUNTRY'] = zip(*sellers_info_df['SELLER_ADDRESS'].apply(extract_city_and_country))
+    sellers_info_df['SELLER_CITY'], sellers_info_df['SELLER_PROVINCE'], sellers_info_df['SELLER_COUNTRY'] = zip(*sellers_info_df['SELLER_ADDRESS'].apply(extract_city_and_country))
     # Update 'SELLER_PROVINCE' if 'Province Not Found' and 'SELLER_PROVINCE_' is not None
     sellers_info_df.loc[(sellers_info_df['SELLER_PROVINCE'] == 'Province Not Found') & (sellers_info_df['SELLER_PROVINCE_'].notna()), 'SELLER_PROVINCE'] = sellers_info_df['SELLER_PROVINCE_']
 
     # Update 'SELLER_CITY' if 'City Not Found' and 'SELLER_CITY_' is not None
-    sellers_info_df.loc[(sellers_info_df['SELLER_CITY'] == 'City not found') & (sellers_info_df['SELLER_CITY_'].notna()), 'SELLER_CITY'] = sellers_info_df['SELLER_CITY_']
-    sellers_info_df['SELLER_CITY'] = sellers_info_df['SELLER_CITY'].str.replace(' City', '', regex=False)
-    sellers_info_df['SELLER_PROVINCE'] = sellers_info_df['SELLER_PROVINCE'].str.replace(' Province', '', regex=False)
-    sellers_info_df['SELLER_PROVINCE'] = sellers_info_df['SELLER_PROVINCE'].fillna(sellers_info_df['SELLER_PROVINCE_'])
+    # sellers_info_df['SELLER_PROVINCE'] = sellers_info_df['SELLER_PROVINCE'].str.replace(' Province', '', regex=False)
+    # sellers_info_df['SELLER_PROVINCE'] = sellers_info_df['SELLER_PROVINCE'].fillna(sellers_info_df['SELLER_PROVINCE_'])
     # sellers_info_df['SELLER_PROVINCE_'] = sellers_info_df['SELLER_PROVINCE_'].fillna(sellers_info_df['SELLER_PROVINCE'])
-    sellers_info_df['SELLER_CITY'] = sellers_info_df['SELLER_CITY'].fillna(sellers_info_df['SELLER_CITY_'])
+    # sellers_info_df['SELLER_CITY'] = sellers_info_df['SELLER_CITY'].fillna(sellers_info_df['SELLER_CITY_'])
     # sellers_info_df['SELLER_CITY_'] = sellers_info_df['SELLER_CITY_'].fillna(sellers_info_df['SELLER_CITY'])
     # Apply the extraction function to each row
     sellers_info_df['SELLER_CITY_'], sellers_info_df['SELLER_PROVINCE_'], sellers_info_df['SELLER_COUNTRY'] = zip(*sellers_info_df['SELLER_CITY'].apply(extract_city_and_country))
