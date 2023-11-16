@@ -11,6 +11,8 @@ from io import BytesIO
 import time
 import platform as sys_platform  # Rename platform to avoid conflicts
 from geo_dict import city_to_province
+from geo_dict import country_city_dict
+from geo_dict import country_area_dict
 
 # from hk_company_crawl import crawl_hk_company_data  # Import the crawling function
 
@@ -1165,69 +1167,7 @@ if uploaded_images:
     st.sidebar.subheader(f"{num_rows} seller(s) have been analysed")
 
 
-    country_city_dict = {
-        ('Shenzhen', 'Guangdong', 'Mainland China'),
-        ('Guangzhou', 'Guangdong', 'Mainland China'),
-        ('Foshan', 'Guangdong', 'Mainland China'),
-        ('Bengbu', 'Anhui', 'Mainland China'),
-        ('Hefei', 'Anhui', 'Mainland China'),
-        ('Nanning', 'Guangxi', 'Mainland China'),
-        ('Shanghai', 'Shanghai', 'Mainland China'),
-        ('Suqian', 'Jiangsu', 'Mainland China'),
-        ('Langfang', 'Hebei', 'Mainland China'),
-        ('China', 'China', 'Mainland China'),
-        ('Zhangjiagang', 'Suzhou', 'Mainland China'),
-        ('Yiwu', 'Zhejiang', 'Mainland China'),
-        ('Lianyungang', 'Jiangsu', 'Mainland China'),
-        ('Nanjing', 'Jiangsu', 'Mainland China'),
-        ('Ningbo', 'Zhejiang', 'Mainland China'),
-        ('Jinan', 'Shandong', 'Mainland China'),
-        ('Nanchang', 'Jiangxi', 'Mainland China'),
-        ('Yiwu', 'Zhejiang', 'Mainland China'),
-        ('Beijing', 'Hebei', 'Mainland China'),
-        ('Foshan', 'Guangdong', 'Mainland China'),
-        ("Xi'an", 'Shaanxi', 'Mainland China'),
-        ('Wuhu', 'Anhui', 'Mainland China'),
-        ('Lianyungang', 'Jiangsu', 'Mainland China'),
-        ('Changchun', 'Jilin', 'Mainland China'),
-        ('Jinhua', 'Zhejiang', 'Mainland China'),
-        ('Changsha', 'Hunan', 'Mainland China'),
-        ('Guangyang', 'Henan', 'Mainland China'),
-        ('Xinyu', 'Jiangxi', 'Mainland China'),
-        ('Yidu', 'Hubei', 'Mainland China'),
-        ('Lanzhou', 'Jiangsu', 'Mainland China'),
-        ('Zhuozhuo', 'Hebei', 'Mainland China'),
-        ('Taizhou', 'Zhejiang', 'Mainland China'),
-        ('Gaozhou', 'Guangdong', 'Mainland China'),
-        ('Changzhou', 'Jiangsu', 'Mainland China'),
-        ('Quanzhou', 'Fujian', 'Mainland China'),
-        ('Huzhou', 'Zhejiang', 'Mainland China'),
-        ('Suzhou', 'Jiangsu', 'Mainland China'),
-        ('Hangzhou', 'Zhejiang', 'Mainland China'),
-        ('Dazhou', 'Hebei', 'Mainland China'),
-        ('Dongguan', 'Guangdong', 'Mainland China'),
-        ('Jiangmen', 'Guangdong', 'Mainland China'),
-        ('Hengyang', 'Hunan', 'Mainland China'),
-        ('Nantong', 'Jiangsu', 'Mainland China'),
-        ('Dazhou', 'Hebei', 'Mainland China'),
-        ('Luoyang', 'Henan', 'Mainland China'),
-        ('Huangshan', 'Anhui', 'Mainland China'),
-        ('Zhoukou', 'Henan', 'Mainland China'),
-        ('Nanping', 'Fujian', 'Mainland China'),
-        ('Jizhou', 'Henan', 'Mainland China'),
-        ('Dongxiang', 'Jiangxi', 'Mainland China'),
-        ('Guigang', 'Guangxi', 'Mainland China'),
-        ('Zhengzhou', 'Henan', 'Mainland China'),
-        ('Albacete', 'Albacete', 'Spain')
-    }
 
-    country_area_dict = {
-        'Mainland China': 'Greater China',
-        'Hong Kong': 'Greater China',
-        'Spain': 'Europe',
-        'Italy': 'Europe',
-        'Germany': 'Europe'
-    }
     # Function to extract city, province, and country
     def extract_city_and_country(address):
         for city, province, country in country_city_dict:
