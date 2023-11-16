@@ -9,7 +9,7 @@ import datetime
 from PIL import Image
 from io import BytesIO
 import time
-import platform
+import platform as sys_platform  # Rename platform to avoid conflicts
 from geo_dict import city_to_province
 
 # from hk_company_crawl import crawl_hk_company_data  # Import the crawling function
@@ -1390,7 +1390,7 @@ if uploaded_images:
 
 
     # Determine the user's home directory and the appropriate path separator
-    current_platform = platform.system()
+    current_platform = sys_platform.system()
     if current_platform == 'Windows':
         # Windows OS
         home_directory = os.path.expanduser("~")
