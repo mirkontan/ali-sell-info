@@ -761,15 +761,46 @@ if uploaded_images:
         except KeyError:
             aliexpress_df['SELLER_EMAIL'] = '-'
 
-
+        
         aliexpress_df['SELLER_EMAIL'] = aliexpress_df['SELLER_EMAIL'].str.strip()
         aliexpress_df['SELLER_EMAIL'] = aliexpress_df['SELLER_EMAIL'].str.split(' ').str[0]  
+      
+        name_columns = ['Numero di telefono', 'Phone Number']
+        try:
+            for index, row in aliexpress_df.iterrows():
+                for column in name_columns:
+                    if column in row and not pd.isna(row[column]) and row[column] != '':
+                        aliexpress_df.at[index, 'SELLER_TEL_N'] = row[column]
+                        break
+        except KeyError:
+            aliexpress_df['SELLER_TEL_N'] = '-'   
+        
         aliexpress_df['SELLER_TEL_N'] = aliexpress_df['Numero di telefono']
-        aliexpress_df['LEGAL_REPRESENTATIVE'] = aliexpress_df['Rappresentante legale']
+
+        name_columns = ['Rappresentante legale', 'Legal Representative']
+        try:
+            for index, row in aliexpress_df.iterrows():
+                for column in name_columns:
+                    if column in row and not pd.isna(row[column]) and row[column] != '':
+                        aliexpress_df.at[index, 'LEGAL_REPRESENTATIVE'] = row[column]
+                        break
+        except KeyError:
+            aliexpress_df['LEGAL_REPRESENTATIVE'] = '-'   
+
+        
         aliexpress_df['INITIAL_CAPITAL'] = '-'
         aliexpress_df['EXPIRATION_DATE'] = '-'
-        aliexpress_df['BUSINESS_DESCRIPTION'] = '-'
 
+        name_columns = ['Business Scope', 'Ambito di attività']
+        try:
+            for index, row in aliexpress_df.iterrows():
+                for column in name_columns:
+                    if column in row and not pd.isna(row[column]) and row[column] != '':
+                        aliexpress_df.at[index, 'BUSINESS_DESCRIPTION'] = row[column]
+                        break
+        except KeyError:
+            aliexpress_df['BUSINESS_DESCRIPTION'] = '-'           
+        
 
 # ------------------------------------------------------------
 #                             TEST - UNKNOWN PLATFORMS
