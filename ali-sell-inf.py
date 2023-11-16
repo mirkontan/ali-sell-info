@@ -1224,7 +1224,9 @@ if uploaded_images:
     country_area_dict = {
         'Mainland China': 'Greater China',
         'Hong Kong': 'Greater China',
-        'Spain': 'Europe'
+        'Spain': 'Europe',
+        'Italy': 'Europe',
+        'Germany': 'Europe'
     }
     # Function to extract city, province, and country
     def extract_city_and_country(address):
