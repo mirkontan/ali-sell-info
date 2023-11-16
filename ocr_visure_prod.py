@@ -7,10 +7,7 @@ import pandas as pd
 import os
 import datetime
 from PIL import Image
-import jieba
 from io import BytesIO
-from bs4 import BeautifulSoup
-import requests
 import time
 from langdetect import detect
 from geo_dict import city_to_province
@@ -27,19 +24,6 @@ def remove_whitespace(df, columns):
     for column in columns:
         df[column] = df[column].str.replace(r'\s', '', regex=True)
 
-
-from googletrans import Translator
-
-# Create a translator instance
-translator = Translator()
-
-# Define a function to translate text
-def translate_to_english(text):
-    try:
-        translated = translator.translate(text, src='zh-CN', dest='en')
-        return translated.text
-    except Exception as e:
-        return text
 
 
 # Set the page title
@@ -120,7 +104,7 @@ if uploaded_images:
         # Perform OCR on the entire uploaded image (CN language)
         image = np.array(bytearray(uploaded_image.read()), dtype=np.uint8)
         image = cv2.imdecode(image, cv2.IMREAD_COLOR)
-        ocr_text = pytesseract.image_to_string(image, lang='chi_sim')
+        ocr_text = pytesseract.image_to_string(image, lang='eng')
        
         if selected_platform_all:
             platform = selected_platform_all
@@ -177,7 +161,7 @@ if uploaded_images:
             image = cv2.imdecode(image, cv2.IMREAD_COLOR)
             
             #test - COLOR IMAGE
-            ocr_text = pytesseract.image_to_string(image, lang='chi_sim', config='--psm 6')
+            ocr_text = pytesseract.image_to_string(image, lang='eng', config='--psm 6')
             # st.write('color image ocr text')
             # st.write(ocr_text)
             # Split the text into lines
@@ -224,7 +208,7 @@ if uploaded_images:
             image = cv2.imdecode(image, cv2.IMREAD_COLOR)
             
             #test - COLOR IMAGE
-            ocr_text = pytesseract.image_to_string(image, lang='chi_sim', config='--psm 6')
+            ocr_text = pytesseract.image_to_string(image, lang='eng', config='--psm 6')
             # st.write('color image ocr text')
             # st.write(ocr_text)
             # Split the text into lines
@@ -260,7 +244,7 @@ if uploaded_images:
             image = cv2.imdecode(image, cv2.IMREAD_COLOR)
 
             # Perform OCR on the entire uploaded image (IT language)
-            ocr_text = pytesseract.image_to_string(image, lang='chi_sim', config='--psm 6')
+            ocr_text = pytesseract.image_to_string(image, lang='eng', config='--psm 6')
 
             # Determine the split point based on the image width (assuming an even split)
             split_point = image.shape[1] // 2  # Split horizontally in the middle of the image
@@ -270,8 +254,8 @@ if uploaded_images:
             right_image = image[:, split_point:]
 
             # Perform OCR on the left and right sections
-            left_ocr_text = pytesseract.image_to_string(left_image, lang='chi_sim', config='--psm 6')
-            right_ocr_text = pytesseract.image_to_string(right_image, lang='chi_sim', config='--psm 6')
+            left_ocr_text = pytesseract.image_to_string(left_image, lang='eng', config='--psm 6')
+            right_ocr_text = pytesseract.image_to_string(right_image, lang='eng', config='--psm 6')
             # st.write(left_ocr_text)
             # st.write(right_ocr_text)
             # Process left and right columns separately
@@ -350,7 +334,7 @@ if uploaded_images:
             image = cv2.imdecode(image, cv2.IMREAD_COLOR)
             
             #test - COLOR IMAGE
-            ocr_text = pytesseract.image_to_string(image, lang='chi_sim', config='--psm 6')
+            ocr_text = pytesseract.image_to_string(image, lang='eng', config='--psm 6')
             # st.write('color image ocr text')
             # st.write(ocr_text)
             # Split the text into lines
@@ -1024,10 +1008,10 @@ if uploaded_images:
     # Apply transformations for other platforms
     # sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME_CN'] = sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME_CN'].str.replace(r'贸易批发商行', 'Wholesale Trading Company', regex=True)
     # sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME_CN'] = sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME_CN'].str.replace(r'商行', 'Trading Company', regex=True)
-    # sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME'] = sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME_CN'].apply(translate_to_english)
+    # sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME'] = sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME_CN']
     # sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME'] = sellers_info_df.loc[~is_aliexpress, 'SELLER_BUSINESS_NAME'].str.replace(r'Trade Trading Company', 'Trading Company', regex=True)
-    # sellers_info_df.loc[~is_aliexpress, 'COMPANY_TYPE_EN'] = sellers_info_df.loc[~is_aliexpress, 'COMPANY_TYPE'].apply(translate_to_english)
-    # sellers_info_df.loc[~is_aliexpress, 'LEGAL_REPRESENTATIVE_EN'] = sellers_info_df.loc[~is_aliexpress, 'LEGAL_REPRESENTATIVE'].apply(translate_to_english)
+    # sellers_info_df.loc[~is_aliexpress, 'COMPANY_TYPE_EN'] = sellers_info_df.loc[~is_aliexpress, 'COMPANY_TYPE']
+    # sellers_info_df.loc[~is_aliexpress, 'LEGAL_REPRESENTATIVE_EN'] = sellers_info_df.loc[~is_aliexpress, 'LEGAL_REPRESENTATIVE']
 
 
     translator = Translator()
@@ -1182,9 +1166,9 @@ if uploaded_images:
     # Apply transformations for 'ALIEXPRESS' platform
     sellers_info_df.loc[is_aliexpress, 'SELLER_ADDRESS'] = sellers_info_df.loc[is_aliexpress, 'SELLER_ADDRESS']
     # Apply transformations for other platforms
-    sellers_info_df.loc[~is_aliexpress, 'SELLER_ADDRESS'] = sellers_info_df.loc[~is_aliexpress, 'SELLER_ADDRESS_CN'].apply(translate_to_english)
-    sellers_info_df['SELLER_CITY'] = sellers_info_df['SELLER_CITY_CN'].apply(translate_to_english)
-    sellers_info_df['SELLER_PROVINCE'] = sellers_info_df['SELLER_PROVINCE_CN'].apply(translate_to_english)
+    sellers_info_df.loc[~is_aliexpress, 'SELLER_ADDRESS'] = sellers_info_df.loc[~is_aliexpress, 'SELLER_ADDRESS_CN']
+    sellers_info_df['SELLER_CITY'] = sellers_info_df['SELLER_CITY_CN']
+    sellers_info_df['SELLER_PROVINCE'] = sellers_info_df['SELLER_PROVINCE_CN']
    
     # Sample DataFrame
     # Replace '-' in COMPANY_TYPE with 'Limited liability company' where COMPANY_NAME contains 'Co., Ltd'
