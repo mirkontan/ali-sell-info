@@ -1216,7 +1216,8 @@ if uploaded_images:
         ('Nanping', 'Fujian', 'Mainland China'),
         ('Jizhou', 'Henan', 'Mainland China'),
         ('Dongxiang', 'Jiangxi', 'Mainland China'),
-        ('Guigang', 'Guangxi', 'Mainland China')
+        ('Guigang', 'Guangxi', 'Mainland China'),
+        ('Zhengzhou', 'Henan', 'Mainland China'),
     }
 
     country_area_dict = {
@@ -1234,7 +1235,7 @@ if uploaded_images:
     for index, province in enumerate(provinces):
         if province == '中国':
             sellers_info_df.at[index, 'SELLER_COUNTRY'] = 'Mainland China'
-
+    sellers_info_df['SELLER_ADDRESS'] = sellers_info_df['SELLER_ADDRESS'].str.replace('Znen', 'Zhen',regex=False)
     # Apply the extraction function to each row
     sellers_info_df['SELLER_CITY_'], sellers_info_df['SELLER_PROVINCE_'], sellers_info_df['SELLER_COUNTRY'] = zip(*sellers_info_df['SELLER_ADDRESS'].apply(extract_city_and_country))
     # Update 'SELLER_PROVINCE' if 'Province Not Found' and 'SELLER_PROVINCE_' is not None
