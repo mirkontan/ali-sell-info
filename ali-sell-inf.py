@@ -1248,7 +1248,7 @@ if uploaded_images:
     # sellers_info_df['SELLER_CITY'] = sellers_info_df['SELLER_CITY'].fillna(sellers_info_df['SELLER_CITY_'])
     # sellers_info_df['SELLER_CITY_'] = sellers_info_df['SELLER_CITY_'].fillna(sellers_info_df['SELLER_CITY'])
     # Apply the extraction function to each row
-    sellers_info_df['SELLER_CITY_'], sellers_info_df['SELLER_PROVINCE_'], sellers_info_df['SELLER_COUNTRY'] = zip(*sellers_info_df['SELLER_CITY'].apply(extract_city_and_country))
+    # sellers_info_df['SELLER_CITY_'], sellers_info_df['SELLER_PROVINCE_'], sellers_info_df['SELLER_COUNTRY'] = zip(*sellers_info_df['SELLER_CITY'].apply(extract_city_and_country))
     mainland_china_rows = sellers_info_df[sellers_info_df['SELLER_COUNTRY'] == 'Mainland China']
 
     # Define a function to generate the URL based on 'SELLER_COUNTRY'
