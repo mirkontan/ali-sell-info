@@ -148,15 +148,8 @@ if uploaded_images:
         
         # Display a small preview of the uploaded image
         st.image(uploaded_image, use_column_width=False, caption=f'Uploaded Image: {uploaded_image.name}', width=400)
-        
-        # Set the target words to look up in each image
-        targets_tmall = ['企业注册号', '企业名称', '类 型', '类 ”型', '类 。 型', '住所', '住 所', '住 ”所', '法定代表人', '成立时间', '注册资本', '营业期限', '经营范围', '经营学围', '登记机关', '该准时间']
-        targets_taobao = ['注册号', '公司名称', '类型',  '地址', '法定代表人', '经营期限自', '注册资本', '营业期限', '经营范围', '经营学围', '登记机关', '该准时间']
-        targets_chinaalibaba = ['统一社会', '公司名称', '企业类型', '类 ”型', '类 。 型', '地址', '法定代表人', '成立日期', '注册资本', '营业期限', '经营范围', '经营学围', '登记机关', '该准时间']
-        targets_jd = ['卖家', '卖 家', '企业名称', '注册号', '注则号', '所在地', '地址', '网址', '法定代表人', '注册资本', '有效期', '经营范围', '经营学围', '店铺名称']
-        targets_aliexpress = ['卖家', '卖 家', '企业名称', '注册号', '注则号', '所在地', '地址', '网址', '法定代表人', '注册资本', '有效期', '经营范围', '经营学围', '店铺名称']
-        targets_test = ['企业注册号', '注册号', '企业名称', '公司名称', '类 型', '类 ”型', '类 。 型', '类型', '地址', '住所', '住 所', '住 ”所']
 
+        
         if extracted_data_per_image['PLATFORM'] == 'TMALL':
             # Perform OCR on the entire uploaded image (IT language)
             image = np.array(bytearray(uploaded_image.read()), dtype=np.uint8)
@@ -200,8 +193,6 @@ if uploaded_images:
             st.write(extracted_data_per_image_tmall)
             st.write(data)
             df_extraction_tmall = pd.concat([df_extraction_tmall, extracted_data_per_image_tmall], ignore_index=True)
-
-            targets = targets_tmall
             
         if extracted_data_per_image['PLATFORM'] == 'TAOBAO':
             # Specify the page segmentation mode (PSM) as 6 for LTR and TTB reading
@@ -238,8 +229,6 @@ if uploaded_images:
             st.write(extracted_data_per_image_taobao)
             st.write(data)
             df_extraction_taobao = pd.concat([df_extraction_taobao, extracted_data_per_image_taobao], ignore_index=True)
-
-            targets = targets_taobao
 
         if extracted_data_per_image['PLATFORM'] == 'CHINAALIBABA':
             image = np.array(bytearray(uploaded_image.read()), dtype=np.uint8)
@@ -328,7 +317,6 @@ if uploaded_images:
 
             # Concatenate the result with an existing DataFrame if required
             df_extraction_chinaalibaba = pd.concat([df_extraction_chinaalibaba, extracted_data_per_image_chinaalibaba], ignore_index=True)
-            targets = targets_chinaalibaba
 
         if extracted_data_per_image['PLATFORM'] == 'JD COM':
             # Perform OCR on the entire uploaded image (IT language)
@@ -382,7 +370,6 @@ if uploaded_images:
             # st.header('JD DATA EXTRACTED IN DICTIONARY')
             # st.write(data)
             df_extraction_jd = pd.concat([df_extraction_jd, extracted_data_per_image_jd], ignore_index=True)
-            targets = targets_jd
 
 
 
@@ -418,44 +405,13 @@ if uploaded_images:
             extracted_data_per_image_aliexpress['FILENAME'] = uploaded_image.name
             # st.write(extracted_data_per_image_aliexpress)
             # st.write(data)
-            df_extraction_aliexpress = pd.concat([df_extraction_aliexpress, extracted_data_per_image_aliexpress], ignore_index=True)
+            df_extraction_aliexpress = pd.concat([df_extraction_aliexpress, extracted_data_per_image_aliexpress], ignore_index=True)        
 
-            targets = targets_aliexpress
-        
-
-        if extracted_data_per_image['PLATFORM'] == 'TEST' or None:
-            targets = targets_test
 
         # Display the entire extracted text
         # st.subheader("Entire Extracted Text in Chinese")
         # st.write(ocr_text)
 
-        for word in targets:
-            # Find the coordinates where the text is found
-            target_text = word
-            text_location = [(m.start(0), m.end(0)) for m in re.finditer(target_text, ocr_text)]
-
-            if text_location:
-                extracted_texts = ''
-                if extracted_data_per_image['PLATFORM'] == 'TMALL' or 'JD COM' or 'ALIEXPRESS' or 'TAOBAO' or 'CHINAALIBABA':
-                    # # Shift the coordinates to the right by 7 pixels
-                    # roi_data = [(start + 4, end + 50) for start, end in text_location]
-                    # extracted_texts = [ocr_text[start:end] for start, end in roi_data]
-                    pass
-
-                elif extracted_data_per_image['PLATFORM'] == 'TEST':
-                    # Shift the coordinates to the right by 7 pixels
-                    roi_data = [(start + 0, end + 50) for start, end in text_location]
-                    extracted_texts = [ocr_text[start:end] for start, end in roi_data]
-                
-                if extracted_texts:
-                    # st.write(f"Extracted Text for '{target_text}' (Shifted by pixels to the right):")
-                    # st.write(extracted_texts)
-                    # Assign the extracted text to the dictionary
-                    extracted_data_per_image[word] = extracted_texts
-            else:
-                # If target text is not found, assign an empty list
-                extracted_data_per_image[word] = ['']
         
         # Create a DataFrame for the extracted data of this image
         df_extraction_image = pd.DataFrame(extracted_data_per_image)
@@ -495,9 +451,7 @@ if uploaded_images:
 # ------------------------------------------------------------
 
     if tmall_df.empty:
-        # Create new columns based on the items in targets_taobao
-        for target in targets_tmall:
-            tmall_df[target] = None  # Add new columns with None values
+        pass
     else:
 
         # # Check for missing values and replace them with an empty string
@@ -560,9 +514,7 @@ if uploaded_images:
    
     # Check if taobao_df is empty
     if taobao_df.empty:
-        # Create new columns based on the items in targets_taobao
-        for target in targets_taobao:
-            taobao_df[target] = None  # Add new columns with None values
+        pass
     else:
         # Check for missing values and replace them with an empty string
         taobao_df['SELLER_VAT_N'] = taobao_df['统一社会信用代码 / 营业执照注册号']
@@ -607,9 +559,7 @@ if uploaded_images:
 #                             1688
 # ------------------------------------------------------------
     if chinaalibaba_df.empty:
-            # Create new columns based on the items in targets_taobao
-            for target in targets_chinaalibaba:
-                chinaalibaba_df[target] = None  # Add new columns with None values
+        pass
     else:
         chinaalibaba_df['SELLER_BUSINESS_NAME_CN'] = chinaalibaba_df['公司名称']
         chinaalibaba_df['SELLER_ADDRESS_CN'] = chinaalibaba_df['注册地址']
@@ -631,11 +581,8 @@ if uploaded_images:
 # ------------------------------------------------------------
 
     if jd_df.empty:
-        # Create new columns based on the items in targets_taobao
-        for target in targets_jd:
-            jd_df[target] = None  # Add new columns with None values
+        pass
     else:
- #     ['卖家', '卖 家', ' '', '店铺名称']
 
         # # Check for missing values and replace them with an empty string
         jd_df['SELLER_VAT_N'] = jd_df['营业执照注册号'] 
@@ -726,10 +673,7 @@ if uploaded_images:
 # ------------------------------------------------------------
 
     if aliexpress_df.empty:
-        # Create new columns based on the items in targets_taobao
-        # targets_aliexpress = ['Nome della società', 'Nome della socletà']
-        for target in targets_aliexpress:
-            jd_df[target] = None  # Add new columns with None values
+        pass
     else:
         try:
             aliexpress_df['SELLER_BUSINESS_NAME'] = aliexpress_df['Nome della società']
@@ -781,9 +725,7 @@ if uploaded_images:
 # ------------------------------------------------------------
 
     if test_df.empty:
-        # Create new columns based on the items in targets_taobao
-        for target in targets_test:
-            test_df[target] = None  # Add new columns with None values
+        pass
     else:
         # # Check for missing values and replace them with an empty string
         test_df['SELLER_VAT_N'] = test_df['企业注册号'].fillna('') + test_df['注册号'].fillna('')
