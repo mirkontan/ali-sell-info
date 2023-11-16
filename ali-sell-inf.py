@@ -354,7 +354,7 @@ if uploaded_images:
         test_df['SELLER_ADDRESS'] = test_df['Address']
 
         try:
-            test_df['SELLER_EMAIL'] = test_df['Email']
+            test_df['SELLER_EMAIL'] = test_df['Email']['SELLER', 'SELLER_URL', 'Company name', 'VAT number', 'registration number', 'Address', 'Legal Representative', 'Business Scope', 'Established', 'Registration authority', 'Phone Number', 'Email', 'PLATFORM', 'FILENAME'
         except KeyError:
             test_df['SELLER_EMAIL'] = test_df['E-mail']
 
