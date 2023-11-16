@@ -1025,14 +1025,7 @@ if uploaded_images:
     def fill_empty_with_translation(df, target_column, source_column):
         for index, row in df.iterrows():
             if pd.isna(row[target_column]) and not pd.isna(row[source_column]):
-                if contains_chinese(row[source_column]):
-                    try:
-                        translation = translator.translate(row[source_column], src='zh-cn', dest='en')
-                        df.at[index, target_column] = translation.text
-                    except Exception as e:
-                        print(f"Translation error: {e}")
-                else:
-                    df.at[index, target_column] = row[source_column]
+                df.at[index, target_column] = row[source_column]
 
     fill_empty_with_translation(sellers_info_df, 'SELLER_BUSINESS_NAME', 'SELLER_BUSINESS_NAME_CN')
 
