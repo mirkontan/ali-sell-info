@@ -9,7 +9,6 @@ import datetime
 from PIL import Image
 from io import BytesIO
 import time
-from langdetect import detect
 from geo_dict import city_to_province
 
 # from hk_company_crawl import crawl_hk_company_data  # Import the crawling function
