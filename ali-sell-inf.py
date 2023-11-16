@@ -715,10 +715,17 @@ if uploaded_images:
         # Remove leading and trailing spaces
         aliexpress_df['SELLER_VAT_N'] = aliexpress_df['SELLER_VAT_N'].str.strip()
 
-        try:
-            aliexpress_df['ESTABLISHED_IN'] = aliexpress_df['Stabilito']
-        except KeyError:
-            aliexpress_df['ESTABLISHED_IN'] = aliexpress_df['. Stabilito']
+        # Define a list of columns that may contain the company name
+        name_columns = ['Stabilito', 'Established']
+        for index, row in aliexpress_df.iterrows():
+            for column in name_columns:
+                if column in row and not pd.isna(row[column]) and row[column] != '':
+                    aliexpress_df.at[index, 'SELLER_VAT_N'] = row[column]
+                    break
+        # try:
+        #     aliexpress_df['ESTABLISHED_IN'] = aliexpress_df['Stabilito']
+        # except KeyError:
+        #     aliexpress_df['ESTABLISHED_IN'] = aliexpress_df['. Stabilito']
         
         aliexpress_df['ESTABLISHED_IN'] = aliexpress_df['ESTABLISHED_IN'].str.strip()
         aliexpress_df['ESTABLISHED_IN'] = aliexpress_df['ESTABLISHED_IN'].str.replace('Autorità di', '-', regex=False)
