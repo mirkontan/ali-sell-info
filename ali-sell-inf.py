@@ -738,7 +738,18 @@ if uploaded_images:
         aliexpress_df['ESTABLISHED_IN'] = aliexpress_df['ESTABLISHED_IN'].str.replace('Autorità di', '-', regex=False)
         aliexpress_df['REGISTRATION_INSTITUTION'] = aliexpress_df['ESTABLISHED_IN'].str.split(' - ').str[1]
         aliexpress_df['ESTABLISHED_IN'] = aliexpress_df['ESTABLISHED_IN'].str.split(' - ').str[0]     
-        aliexpress_df['SELLER_ADDRESS'] = aliexpress_df['Indirizzo']
+
+        name_columns = ['Indirizzo', 'Address']
+        try:
+            for index, row in aliexpress_df.iterrows():
+                for column in name_columns:
+                    if column in row and not pd.isna(row[column]) and row[column] != '':
+                        aliexpress_df.at[index, 'SELLER_ADDRESS'] = row[column]
+                        break
+        except KeyError:
+            aliexpress_df['SELLER_ADDRESS'] = '-'
+            
+        # aliexpress_df['SELLER_ADDRESS'] = aliexpress_df['Indirizzo']
 
         try:
             aliexpress_df['SELLER_EMAIL'] = aliexpress_df['E-mail']
