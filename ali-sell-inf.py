@@ -1218,11 +1218,13 @@ if uploaded_images:
         ('Dongxiang', 'Jiangxi', 'Mainland China'),
         ('Guigang', 'Guangxi', 'Mainland China'),
         ('Zhengzhou', 'Henan', 'Mainland China'),
+        ('Albacete', 'Albacete', 'Spain')
     }
 
     country_area_dict = {
         'Mainland China': 'Greater China',
-        'Hong Kong': 'Greater China'
+        'Hong Kong': 'Greater China',
+        'Spain': 'Europe'
     }
     # Function to extract city, province, and country
     def extract_city_and_country(address):
