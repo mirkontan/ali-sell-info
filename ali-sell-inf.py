@@ -403,8 +403,8 @@ if uploaded_images:
             extracted_data_per_image_aliexpress = pd.DataFrame([data])
             extracted_data_per_image_aliexpress['PLATFORM'] = 'ALIEXPRESS'
             extracted_data_per_image_aliexpress['FILENAME'] = uploaded_image.name
-            # st.write(extracted_data_per_image_aliexpress)
-            # st.write(data)
+            st.write(extracted_data_per_image_aliexpress)
+            st.write(data)
             df_extraction_aliexpress = pd.concat([df_extraction_aliexpress, extracted_data_per_image_aliexpress], ignore_index=True)        
 
 
