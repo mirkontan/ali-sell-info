@@ -719,7 +719,7 @@ if uploaded_images:
         aliexpress_df['SELLER_VAT_N'] = aliexpress_df['SELLER_VAT_N'].str.strip()
 
         # Define a list of columns that may contain the company name
-        name_columns = ['Stabilito', 'Established']
+        name_columns = ['Stabilito', 'Established', 'Estabiished']
         try:
             for index, row in aliexpress_df.iterrows():
                 for column in name_columns:
