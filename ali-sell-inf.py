@@ -764,6 +764,9 @@ if uploaded_images:
         
         aliexpress_df['SELLER_EMAIL'] = aliexpress_df['SELLER_EMAIL'].str.strip()
         aliexpress_df['SELLER_EMAIL'] = aliexpress_df['SELLER_EMAIL'].str.split(' ').str[0]  
+        aliexpress_df['SELLER_EMAIL'] = aliexpress_df['SELLER_EMAIL'].str.replace('qg.com', 'qq.com', regex=False)
+        aliexpress_df['SELLER_EMAIL'] = aliexpress_df['SELLER_EMAIL'].str.replace('qgq.com', 'qq.com', regex=False)
+
       
         name_columns = ['Numero di telefono', 'Phone Number']
         try:
