@@ -778,8 +778,6 @@ if uploaded_images:
         except KeyError:
             aliexpress_df['SELLER_TEL_N'] = '-'   
         
-        aliexpress_df['SELLER_TEL_N'] = aliexpress_df['Numero di telefono']
-
         name_columns = ['Rappresentante legale', 'Legal Representative']
         try:
             for index, row in aliexpress_df.iterrows():
